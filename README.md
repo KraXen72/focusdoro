@@ -1,4 +1,6 @@
 # Online Timers
+> Thank you to the original project & author: [diogenesofweb/focus](https://github.com/diogenesofweb/focus)  
+> The fork is a continuation, since the original deployment at `focus.delphic.top` died  
 
 1. Pomodoro
 2. Stopwatch

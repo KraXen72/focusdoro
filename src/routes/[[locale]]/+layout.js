@@ -1,4 +1,5 @@
 import { error } from '@sveltejs/kit';
+import { base } from '$app/paths';
 export const ssr = true;
 export const prerender = true;
 // import * from './../../../src'
@@ -7,7 +8,7 @@ export const prerender = true;
 export async function load(ev) {
 	const l = ev.params.locale;
 
-	const prefix = l ? `/${l}` : '';
+	const prefix = l ? `${base}/${l}` : base;
 	// /** @type { 'en' | 'fr' | 'ua' } */
 	const locale = l || 'en';
 

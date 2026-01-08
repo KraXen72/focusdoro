@@ -22,7 +22,7 @@
 
 	function handle_close() {
 		// console.log('close');
-		goto('/countdown');
+		goto(`${l.r.prefix}/countdown`);
 	}
 	const title = th.title(data.minutes);
 </script>

@@ -1,5 +1,7 @@
 import { error } from '@sveltejs/kit';
 
+export const prerender = false;
+
 /** @type {import('./$types').PageLoad} */
 export function load(ev) {
 	const x = ev.params.mins;

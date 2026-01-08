@@ -15,7 +15,7 @@ const config = {
 			'$typings/*': './src/typings/*'
 		},
 		paths: {
-			base: '/focusdoro'
+			base: process.env.NODE_ENV === 'production' ? '/focusdoro' : ''
 		}
 	},
 	preprocess: vitePreprocess()

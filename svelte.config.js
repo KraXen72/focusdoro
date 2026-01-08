@@ -16,6 +16,15 @@ const config = {
 		},
 		paths: {
 			base: process.env.NODE_ENV === 'production' ? '/focusdoro' : ''
+		},
+		prerender: {
+			handleHttpError: ({ path, referrer, message }) => {
+				// Ignore errors for paths that don't begin with base
+				if (message.includes('does not begin with `base`')) {
+					return;
+				}
+				throw new Error(message);
+			}
 		}
 	},
 	preprocess: vitePreprocess()

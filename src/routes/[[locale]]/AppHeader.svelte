@@ -2,7 +2,7 @@
 	import Name from '$lib/Name.svelte';
 	import AppMenu from './AppMenu.svelte';
 	import AppSettings from './AppSettings.svelte';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	// import AppLangSwitch from './AppLangSwitch.svelte';
 	import { getContext } from 'svelte';
 	import AddAlarm from './pomodoro/AddAlarm.svelte';
@@ -24,7 +24,7 @@
 
 		<!-- <div class="fce g1 alpha" style="--_bg: var(--__mg0)"> -->
 		<div class="fce alpha btns">
-			{#if $page.route.id === '/[[locale]]/pomodoro'}
+			{#if page.route.id === '/[[locale]]/pomodoro'}
 				<AddAlarm />
 				<AddTimer />
 			{/if}

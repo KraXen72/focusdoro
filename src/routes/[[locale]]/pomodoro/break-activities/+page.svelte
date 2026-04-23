@@ -1,4 +1,6 @@
 <script>
+	import { preventDefault } from 'svelte/legacy';
+
 	import MyLayout from '$lib/MyLayout.svelte';
 	import { ldb } from '$lib/db';
 	import { Btn, Field, Icon } from '@kazkadien/svelte';
@@ -12,7 +14,7 @@
 	const th = l.t.r.breaks.head;
 	const tb = l.t.r.breaks.body;
 
-	let newListName = '';
+	let newListName = $state('');
 	function handleSubmitNewList() {
 		console.log({ newListName });
 		listNames = [newListName, ...listNames];
@@ -36,7 +38,7 @@
 	}
 
 	/** @type {string[]} */
-	let listNames = [];
+	let listNames = $state([]);
 	ldb.activities.getNames().then((res) => {
 		listNames = res;
 		if (res.length) {
@@ -49,9 +51,9 @@
 		// @ts-ignore
 		ldb.activities.getOneByName(name).then((v) => (values = v?.values));
 	}
-	let name = '';
+	let name = $state('');
 	/** @type {Set<string>} */
-	let values = new Set();
+	let values = $state(new Set());
 
 	/** @param {Event & { currentTarget: EventTarget & HTMLSelectElement; }} ev */
 	function onChangeList(ev) {
@@ -69,7 +71,7 @@
 		upsert();
 	}
 
-	let action = '';
+	let action = $state('');
 	function handleSubmitNewActivity() {
 		console.log(values);
 		console.log(action);
@@ -108,8 +110,7 @@
 	/** @param {unknown} data */
 	function get_activity_lists_from_backup(data) {
 		if (Array.isArray(data)) return data;
-		/** @type {{data?: unknown}} */
-		const x = data;
+		const x = /** @type {{data?: unknown}} */ (data);
 		return Array.isArray(x.data) ? x.data : [];
 	}
 
@@ -150,94 +151,100 @@
 </svelte:head>
 
 <MyLayout title="">
-	<div slot="top">
-		<form class="form v2 alpha" on:submit|preventDefault={handleSubmitNewList}>
-			<Field label={tb.new}>
-				<input
-					bind:value={newListName}
-					type="text"
-					required
-					maxlength="240"
-					minlength="2"
-					placeholder="My list name"
-				/>
-			</Field>
-		</form>
-
-		<div class="g1a">
-			<div class="form v2 ll">
-				<Field label={tb.list}>
-					<select on:change={onChangeList}>
-						{#each listNames as val}
-							<option selected={val === name}>{val}</option>
-						{/each}
-					</select>
+	{#snippet top()}
+		<div >
+			<form class="form v2 alpha" onsubmit={preventDefault(handleSubmitNewList)}>
+				<Field label={tb.new}>
+					<input
+						bind:value={newListName}
+						type="text"
+						required
+						maxlength="240"
+						minlength="2"
+						placeholder="My list name"
+					/>
 				</Field>
-			</div>
-			<Btn
-				iconOnly
-				colored
-				accent="danger"
-				variant="text"
-				title={l.t.btn.del}
-				on:click={deleteList}
-			>
-				<Icon name="delete" />
-			</Btn>
-		</div>
-	</div>
+			</form>
 
-	<svelte:fragment slot="list">
-		{#each [...values] as el}
-			<li>
-				<span>{el}</span>
+			<div class="g1a">
+				<div class="form v2 ll">
+					<Field label={tb.list}>
+						<select onchange={onChangeList}>
+							{#each listNames as val}
+								<option selected={val === name}>{val}</option>
+							{/each}
+						</select>
+					</Field>
+				</div>
 				<Btn
 					iconOnly
-					accent="danger"
 					colored
+					accent="danger"
 					variant="text"
-					on:click={() => onDelete(el)}
+					title={l.t.btn.del}
+					on:click={deleteList}
 				>
 					<Icon name="delete" />
 				</Btn>
-			</li>
-		{:else}
-			<li>Empty</li>
-		{/each}
-	</svelte:fragment>
-
-	<form
-		slot="btns"
-		class="form v2 alpha end"
-		on:submit|preventDefault={handleSubmitNewActivity}
-	>
-		<Field label={tb.new_activity}>
-			<input
-			bind:value={action}
-			type="text"
-			required
-			maxlength="240"
-			minlength="2"
-			placeholder="Plank"
-			/>
-		</Field>
-		<div class="backup-btns">
-			<Btn
-				type="button"
-				on:click={onExport}
-				accent="beta"
-				variant="outlined"
-				text="Export JSON"
-			/>
-			<Btn
-				type="button"
-				on:click={onImport}
-				accent="gamma"
-				variant="outlined"
-				text="Import JSON"
-			/>
+			</div>
 		</div>
-	</form>
+	{/snippet}
+
+	{#snippet list()}
+	
+			{#each [...values] as el}
+				<li>
+					<span>{el}</span>
+					<Btn
+						iconOnly
+						accent="danger"
+						colored
+						variant="text"
+						on:click={() => onDelete(el)}
+					>
+						<Icon name="delete" />
+					</Btn>
+				</li>
+			{:else}
+				<li>Empty</li>
+			{/each}
+		
+	{/snippet}
+
+	{#snippet btns()}
+		<form
+			
+			class="form v2 alpha end"
+			onsubmit={preventDefault(handleSubmitNewActivity)}
+		>
+			<Field label={tb.new_activity}>
+				<input
+				bind:value={action}
+				type="text"
+				required
+				maxlength="240"
+				minlength="2"
+				placeholder="Plank"
+				/>
+			</Field>
+			<div class="backup-btns">
+				<Btn
+					type="button"
+					on:click={onExport}
+					accent="beta"
+					variant="outlined"
+					text="Export JSON"
+				/>
+				<Btn
+					type="button"
+					on:click={onImport}
+					accent="gamma"
+					variant="outlined"
+					text="Import JSON"
+				/>
+			</div>
+		</form>
+	{/snippet}
 </MyLayout>
 
 <div class="notes" lang="en">

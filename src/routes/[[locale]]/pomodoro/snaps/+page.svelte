@@ -68,7 +68,7 @@
 
 		saveTemplateAsFile('focus.snap.json', snap);
 	}
-	let msg = '';
+	let msg = $state('');
 
 	/** @param {Event & { currentTarget: EventTarget & HTMLInputElement; }} ev */
 	function restore(ev) {
@@ -128,7 +128,7 @@
 			<div class="form v2">
 				<label class="field">
 					<b>{l.t.r.snaps.body.restore}</b>
-					<input type="file" accept="application/json" on:change={restore} />
+					<input type="file" accept="application/json" onchange={restore} />
 				</label>
 			</div>
 		{/if}

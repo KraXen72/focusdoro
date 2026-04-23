@@ -1,4 +1,6 @@
 <script>
+	import { preventDefault } from 'svelte/legacy';
+
 	import { BoxField, BoxFieldEntry } from '@kazkadien/svelte';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { getContext } from 'svelte';
@@ -11,11 +13,11 @@
 
 	const dispatch = createEventDispatcher();
 
-	let vv = {
+	let vv = $state({
 		hh: 0,
 		mm: 0,
 		ss: 0
-	};
+	});
 
 	const ls_timer_vals = 'CT_values';
 
@@ -38,7 +40,7 @@
 	}
 
 	const ls_remember = 'CT_remember';
-	let is_remember = false;
+	let is_remember = $state(false);
 
 	onMount(() => {
 		is_remember = !!localStorage.getItem(ls_remember);
@@ -67,7 +69,7 @@
 	}
 </script>
 
-<form class="form v2 alpha" on:submit|preventDefault={on_submit}>
+<form class="form v2 alpha" onsubmit={preventDefault(on_submit)}>
 	<TimerForm {vv} />
 
 	<BoxField rows>
@@ -76,7 +78,7 @@
 				name="remember_timer"
 				type="checkbox"
 				checked={is_remember}
-				on:change={on_change_remember}
+				onchange={on_change_remember}
 			/>
 		</BoxFieldEntry>
 	</BoxField>

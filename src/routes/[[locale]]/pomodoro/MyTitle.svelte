@@ -1,4 +1,4 @@
-<script context="module">
+<script module>
 	import { writable } from 'svelte/store';
 	// todo: set init title
 	export const my_title = writable('');

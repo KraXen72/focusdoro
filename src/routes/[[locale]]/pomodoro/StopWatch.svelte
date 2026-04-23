@@ -1,5 +1,5 @@
 <script>
-	import { BtnIcon } from '@kazkadien/svelte';
+	import { Btn } from '@kazkadien/svelte';
 	import { sh } from './MainView.svelte';
 	// import { timers } from './TimerNew.svelte';
 	import { my_title } from './MyTitle.svelte';
@@ -36,8 +36,8 @@
 		}
 	};
 
-	let value = '00:00:00';
-	let is_running = false;
+	let value = $state('00:00:00');
+	let is_running = $state(false);
 
 	function handle_reset() {
 		is_running = false;
@@ -60,7 +60,7 @@
 
 	/** @typedef {[number, string, string] } CycleItem */
 	/** @type {CycleItem[] } */
-	let cycles = [];
+	let cycles = $state([]);
 	let i = 1;
 	/** @type {WTime} */
 	let prev = { ...time };
@@ -90,31 +90,37 @@
 		</section>
 
 		<div class="fce">
-			<BtnIcon
-				iconName={is_running ? ii.pause : ii.play_arrow}
+			<Btn
+				iconOnly
 				variant="text"
 				round
 				title={is_running ? bb.pause : bb.start}
 				on:click={handle_start_stop}
-			/>
+			>
+				<MyIcon name={is_running ? ii.pause : ii.play_arrow} />
+			</Btn>
 
-			<BtnIcon
+			<Btn
+				iconOnly
 				accent="beta"
 				variant="text"
 				round
 				title={bb.cycle}
-				iconName={ii.cycle}
 				on:click={handle_cycle}
-			/>
+			>
+				<MyIcon name={ii.cycle} />
+			</Btn>
 
-			<BtnIcon
+			<Btn
+				iconOnly
 				accent="danger"
 				variant="text"
 				round
 				title={bb.reset}
-				iconName={ii.stop}
 				on:click={handle_reset}
-			/>
+			>
+				<MyIcon name={ii.stop} />
+			</Btn>
 		</div>
 	</div>
 

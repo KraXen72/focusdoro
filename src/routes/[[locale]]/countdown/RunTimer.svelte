@@ -15,25 +15,51 @@
 
 	const dispatch = createEventDispatcher();
 
-	export let with_label = false;
-	export let days = 0;
-	export let with_controls = true;
-	export let show_init_nums = true;
-	export let autostart = true;
-	export let t = { hh: 0, mm: 0, ss: 0 };
-	export let heading = l.t.timers.countdown.h;
+	/**
+	 * @typedef {Object} Props
+	 * @property {boolean} [with_label]
+	 * @property {number} [days]
+	 * @property {boolean} [with_controls]
+	 * @property {boolean} [show_init_nums]
+	 * @property {boolean} [autostart]
+	 * @property {any} [t]
+	 * @property {any} [heading]
+	 * @property {string } [title]
+	 */
 
-	const h0 = ch(t.hh);
-	const m0 = ch(t.mm);
-	const s0 = ch(t.ss);
-	const init_nums = show_init_nums ? `${h0}:${m0}:${s0}` : '';
+	/** @type {Props} */
+	let {
+		with_label = false,
+		days = 0,
+		with_controls = true,
+		show_init_nums = true,
+		autostart = true,
+		t = /** @type {{hh: number, mm: number, ss: number}} */ ({ hh: 0, mm: 0, ss: 0 }),
+		heading = l.t.timers.countdown.h,
+		title = $bindable('')
+	} = $props();
 
-	let HH = h0;
-	let MM = m0;
-	let SS = s0;
+	let h0 = $state('00');
+	let m0 = $state('00');
+	let s0 = $state('00');
+	let init_nums = $state('');
+	let HH = $state('00');
+	let MM = $state('00');
+	let SS = $state('00');
+	let initialized = false;
 
-	/** @type {string } */
-	export let title = '';
+	$effect(() => {
+		h0 = String(ch(t.hh));
+		m0 = String(ch(t.mm));
+		s0 = String(ch(t.ss));
+		init_nums = show_init_nums ? `${h0}:${m0}:${s0}` : '';
+		if (!initialized) {
+			HH = h0;
+			MM = m0;
+			SS = s0;
+			initialized = true;
+		}
+	});
 
 	/** @type {Worker | null} */
 	let w = null;
@@ -45,16 +71,16 @@
 		w.onmessage = function (e) {
 			// console.log(e.data);
 			if (e.data.mes == msg.tick) {
-				SS = ch(e.data.sec);
+				SS = String(ch(e.data.sec));
 
 				const m = e.data.min;
 
 				if (m >= 60) {
-					HH = ch(Math.floor(m / 60));
-					MM = ch(m % 60);
+					HH = String(ch(Math.floor(m / 60)));
+					MM = String(ch(m % 60));
 				} else {
 					HH = '00';
-					MM = ch(m);
+					MM = String(ch(m));
 				}
 
 				title = `${HH}:${MM}:${SS} / ${h0}:${m0}:${s0}`;
@@ -99,8 +125,8 @@
 		}
 	});
 
-	let is_finished = false;
-	let is_running = false;
+	let is_finished = $state(false);
+	let is_running = $state(false);
 
 	function handle_play() {
 		// console.log('play');
@@ -134,13 +160,15 @@
 	{with_label}
 	{days}
 >
-	<svelte:fragment slot="btns">
-		<MyBtn
-			text={is_finished ? bb.restart : is_running ? bb.pause : bb.start}
-			on:click={handle_play}
-		/>
-		<MyBtn accent="danger" text={bb.reset} on:click={() => dispatch('close')} />
-	</svelte:fragment>
+	{#snippet btns()}
+	
+			<MyBtn
+				text={is_finished ? bb.restart : is_running ? bb.pause : bb.start}
+				onclick={handle_play}
+			/>
+			<MyBtn accent="danger" text={bb.reset} onclick={() => dispatch('close')} />
+		
+	{/snippet}
 </MyBoxLay>
 
 <!-- <style> -->

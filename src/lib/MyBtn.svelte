@@ -1,16 +1,27 @@
 <script>
-	/** @type {import("@kazkadien/svelte/dist/types").Accent | ''} */
-	export let accent = '';
-	/** @type {string } */
-	export let text = '';
-	/** @type {string } */
-	export let title;
+	/**
+	 * @typedef {Object} Props
+	 * @property {'base' | 'alpha' | 'beta' | 'gamma' | 'danger' | ''} [accent]
+	 * @property {string } [text]
+	 * @property {string } [title]
+	 * @property {(event: MouseEvent) => void} [onclick]
+	 * @property {import('svelte').Snippet} [children]
+	 */
+
+	/** @type {Props} */
+	let {
+		accent = '',
+		text = '',
+		title = '',
+		onclick,
+		children
+	} = $props();
 </script>
 
-<button class="btn colored outlined {accent}" on:click title="{title}">
+<button class="btn colored outlined {accent}" {onclick} {title}>
 	{#if text}
 		<b> {text} </b>
 	{:else}
-		<slot><!-- optional fallback --></slot>
+		{#if children}{@render children()}{:else}<!-- optional fallback -->{/if}
 	{/if}
 </button>

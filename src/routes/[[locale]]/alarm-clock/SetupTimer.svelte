@@ -1,6 +1,8 @@
 <script>
+	import { preventDefault } from 'svelte/legacy';
+
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { ch } from '$lib/utils';
 	import { ensureAlarmPermission } from '$lib/audio';
 	import { Btn, Field } from '@kazkadien/svelte';
@@ -17,9 +19,9 @@
 	const hhmm = (/** @type {Date} */ d) =>
 		ch(d.getHours()) + ':' + ch(d.getMinutes());
 
-	let date = today;
-	let time = hhmm(now);
-	let warn = '';
+	let date = $state(today);
+	let time = $state(hhmm(now));
+	let warn = $state('');
 
 	function on_submit() {
 		// console.log({ time });
@@ -38,13 +40,13 @@
 
 		// dispatch('start', d2);
 
-		const url = $page.data.r.prefix + `/countdown/to/${d2}`;
+		const url = page.data.r.prefix + `/countdown/to/${d2}`;
 		ensureAlarmPermission();
 		goto(url);
 	}
 </script>
 
-<form class="form v2 alpha" on:submit|preventDefault={on_submit}>
+<form class="form v2 alpha" onsubmit={preventDefault(on_submit)}>
 	<div class="sec">
 		<Field label={l.t.time.date}>
 			<input type="date" min={today} bind:value={date} required />

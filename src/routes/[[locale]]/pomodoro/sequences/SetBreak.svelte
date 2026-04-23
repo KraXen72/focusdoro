@@ -7,16 +7,23 @@
 	const l = getContext('ttt');
 	const ee = l.t.r.sequences.body.e;
 
-	/** @type {Dropdown} */
-	let dropdownComp;
+	/** @type {Dropdown | null} */
+	let dropdownComp = $state(null);
+	/** @typedef {'base' | 'alpha' | 'beta' | 'gamma' | 'danger'} Accent */
 	/** @type {string[]} */
-	let lists = [];
+	let lists = $state([]);
 	ldb.activities.getNames().then((v) => (lists = [...v]));
 
-	/** @type {import("$lib/types").IBreakItem} */
-	export let _break;
+	
+	/**
+	 * @typedef {Object} Props
+	 * @property {import("$lib/types").IBreakItem} _break
+	 */
 
-	/** @type {import('@kazkadien/svelte/dist/types').Accent[]} */
+	/** @type {Props} */
+	let { _break = $bindable() } = $props();
+
+	/** @type {Accent[]} */
 	// const accents = ['alpha', 'gamma', 'danger', 'base'];
 	const accents = ['beta', 'base'];
 	/** @type {import('$typings/types').BreakItemIconName[]}  */
@@ -24,7 +31,7 @@
 
 	/**
 	 * @param {import('$typings/types').BreakItemIconName} name_
-	 * @param {import('@kazkadien/svelte/dist/types').Accent} accent_
+	 * @param {Accent} accent_
 	 */
 	function onClick(name_, accent_) {
 		// console.log({ name: name_, accent_ });
@@ -48,7 +55,9 @@
 	colored
 	accent={_break.icon.accent}
 >
-	<MyIcon name={_break.icon.name} slot="dropbtn" />
+	<svelte:fragment slot="dropbtn">
+		<MyIcon name={_break.icon.name}  />
+	</svelte:fragment>
 	<div class="menu">
 		{#each accents as accent}
 			<div class="row {accent}">
@@ -60,7 +69,7 @@
 						{accent}
 						on:click={function () {
 							onClick(name, accent);
-							dropdownComp.closeMe();
+							dropdownComp?.closeMe();
 						}}
 					>
 						<MyIcon {name} {accent} />
@@ -89,7 +98,7 @@
 {#if !_break.activity}
 	<Field label={ee.activity_list}>
 		<select bind:value={_break.listName}>
-			<option value="" />
+			<option value=""></option>
 			{#each lists as val}
 				<option value={val}>{val}</option>
 			{/each}
@@ -98,7 +107,7 @@
 {/if}
 
 <style>
-	:is(div.menu) {
+	:is(:global(div.menu)) {
 		/* gap: 1ch; */
 		padding: 1ch;
 		background: var(--bg2);

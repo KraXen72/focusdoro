@@ -1,4 +1,7 @@
 <script>
+	import { createBubbler, preventDefault } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import SetupLay from '$lib/SetupLay.svelte';
 	import { Btn, Field } from '@kazkadien/svelte';
 	import { getContext } from 'svelte';
@@ -12,14 +15,14 @@
 	const today = now.toLocaleDateString('fr-CA');
 	// console.log({ today });
 
-	let date = today;
+	let date = $state(today);
 
-	let years = 0;
-	let months = 0;
-	let weeks = 0;
-	let days = 0;
+	let years = $state(0);
+	let months = $state(0);
+	let weeks = $state(0);
+	let days = $state(0);
 	/** @type {ReturnType<get_val> | null } */
-	let v = null;
+	let v = $state(null);
 
 	function on_subtract() {
 		let d = new Date(date);
@@ -109,7 +112,7 @@
 		<p>{tb.p}</p>
 	</header>
 
-	<form class="form v2 alpha" on:submit|preventDefault>
+	<form class="form v2 alpha" onsubmit={preventDefault(bubble('submit'))}>
 		<Field label={l.t.time.date}>
 			<input type="date" bind:value={date} required />
 		</Field>

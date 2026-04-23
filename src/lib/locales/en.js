@@ -242,12 +242,12 @@ const en = {
 
 		c_preset: {
 			head: {
-				title: (n) => `${n} Minute Timer Online`,
-				desc: (n) =>
+				title: (/** @type {number} */ n) => `${n} Minute Timer Online`,
+				desc: (/** @type {number} */ n) =>
 					`Run a pre-set ${n} munute countdown timer in one click. It's free and easy-to-use.`
 			},
 			body: {
-				h1: (n) => `Pre-set ${n} minute countdown timer.`,
+				h1: (/** @type {number} */ n) => `Pre-set ${n} minute countdown timer.`,
 				d1: 'More',
 				d2: 'pre-set timers'
 				// h: 'Countdown'

@@ -1,7 +1,7 @@
 <script>
 	import { ldb } from '$lib/db';
 	/** @type {Set<string>} */
-	let res = new Set();
+	let res = $state(new Set());
 
 	ldb.activities.list().then((v) => {
 		// console.log(v);
@@ -13,6 +13,6 @@
 
 <datalist id="my-breaks">
 	{#each [...res] as el}
-		<option value={el} />
+		<option value={el}></option>
 	{/each}
 </datalist>

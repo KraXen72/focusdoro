@@ -11,7 +11,7 @@
 	const tb = l.t.r.radios.body;
 
 	/** @type {import('$lib/types').IRadioStation[]} */
-	let myStations = [];
+	let myStations = $state([]);
 	reload();
 
 	function reload() {
@@ -20,7 +20,7 @@
 			// console.log(myStations);
 		});
 	}
-	let is_confirm = false;
+	let is_confirm = $state(false);
 	function on_reset() {
 		if (!is_confirm) {
 			is_confirm = true;
@@ -31,9 +31,9 @@
 		ldb.stations.reset_to_default().then(() => reload());
 	}
 
-	let modalIsOpen = false;
+	let modalIsOpen = $state(false);
 	/** @type {import('$lib/types').IRadioStation | undefined} */
-	let station2edit;
+	let station2edit = $state();
 
 	/** @param {number} id */
 	function onDelete(id) {
@@ -60,7 +60,7 @@
 		station2edit = undefined;
 	}
 
-	$: tt = is_confirm ? `${bb.confirm} ${tb.e.reset}` : tb.e.reset;
+	let tt = $derived(is_confirm ? `${bb.confirm} ${tb.e.reset}` : tb.e.reset);
 </script>
 
 <svelte:head>
@@ -81,40 +81,44 @@
 {/if}
 
 <MyLayout title={tb.h}>
-	<svelte:fragment slot="list">
-		{#each myStations as el}
-			<li>
-				<span> {el.name} </span>
+	{#snippet list()}
+	
+			{#each myStations as el}
+				<li>
+					<span> {el.name} </span>
 
-				<div class="btns">
-					<Btn
-						iconOnly
-						accent="alpha"
-						colored
-						variant="text"
-						on:click={() => onEdit(el)}
-						title={bb.edit}
-					>
-						<MyIcon name="edit" />
-					</Btn>
+					<div class="btns">
+						<Btn
+							iconOnly
+							accent="alpha"
+							colored
+							variant="text"
+							on:click={() => onEdit(el)}
+							title={bb.edit}
+						>
+							<MyIcon name="edit" />
+						</Btn>
 
-					<Btn
-						iconOnly
-						accent="danger"
-						colored
-						variant="text"
-						on:click={() => onDelete(el.id)}
-						title={bb.del}
-					>
-						<Icon name="delete" />
-					</Btn>
-				</div>
-			</li>
-		{/each}
-	</svelte:fragment>
+						<Btn
+							iconOnly
+							accent="danger"
+							colored
+							variant="text"
+							on:click={() => onDelete(el.id)}
+							title={bb.del}
+						>
+							<Icon name="delete" />
+						</Btn>
+					</div>
+				</li>
+			{/each}
+		
+	{/snippet}
 
-	<div slot="btns" class="fsb g1">
-		<Btn on:click={onAdd} accent="alpha" variant="filled" text={tb.e.add} />
-		<Btn on:click={on_reset} accent="danger" variant="filled" text={tt} />
-	</div>
+	{#snippet btns()}
+		<div  class="fsb g1">
+			<Btn on:click={onAdd} accent="alpha" variant="filled" text={tb.e.add} />
+			<Btn on:click={on_reset} accent="danger" variant="filled" text={tt} />
+		</div>
+	{/snippet}
 </MyLayout>

@@ -6,19 +6,26 @@
 	const l = getContext('ttt');
 	const ee = l.t.r.sequences.body.e;
 
-	/** @type {Dropdown} */
-	let dropdownComp;
-	/** @type {import('$lib/types').IFocusItem} */
-	export let focus;
+	/** @type {Dropdown | null} */
+	let dropdownComp = $state(null);
+	/** @typedef {'base' | 'alpha' | 'beta' | 'gamma' | 'danger'} Accent */
+	
+	/**
+	 * @typedef {Object} Props
+	 * @property {import('$lib/types').IFocusItem} focus
+	 */
+
+	/** @type {Props} */
+	let { focus = $bindable() } = $props();
 	// console.log(focus);
 
-	/** @type {import('@kazkadien/svelte/dist/types').Accent[]} */
+	/** @type {Accent[]} */
 	const accents = ['alpha', 'gamma', 'danger'];
 	/** @type {import('$typings/types').IMyIcon[]}  */
 	const icons = ['flag', 'edit', 'code', 'workspaces', 'info'];
 	/**
 	 * @param {import('$typings/types').IMyIcon} name_
-	 * @param {import('@kazkadien/svelte/dist/types').Accent} accent_
+	 * @param {Accent} accent_
 	 */
 	function onClick(name_, accent_) {
 		// console.log({ name: name_, accent_ });
@@ -41,7 +48,9 @@
 	colored
 	accent={focus.icon.accent}
 >
-	<MyIcon name={focus.icon.name} slot="dropbtn" />
+	<svelte:fragment slot="dropbtn">
+		<MyIcon name={focus.icon.name}  />
+	</svelte:fragment>
 	<div class="menu">
 		{#each accents as accent}
 			<div class="row">
@@ -52,7 +61,7 @@
 						{accent}
 						on:click={function () {
 							onClick(name, accent);
-							dropdownComp.closeMe();
+							dropdownComp?.closeMe();
 						}}
 					>
 						<MyIcon {name} {accent} />
@@ -79,7 +88,7 @@
 </Field>
 
 <style>
-	:is(div.menu) {
+	:is(:global(div.menu)) {
 		/* gap: 1ch; */
 		padding: 1ch;
 		background: var(--bg2);

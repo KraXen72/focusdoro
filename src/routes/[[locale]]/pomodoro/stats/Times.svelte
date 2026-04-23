@@ -12,8 +12,14 @@
 		return h ? `${ch(h)}:${ch(m)}` : `00:${ch(m)}`;
 	};
 
-	/** @type {import("$lib/types").IStat[]} */
-	export let times = [];
+	
+	/**
+	 * @typedef {Object} Props
+	 * @property {import("$lib/types").IStat[]} [times]
+	 */
+
+	/** @type {Props} */
+	let { times = [] } = $props();
 </script>
 
 <table>

@@ -14,7 +14,7 @@
 	const l = getContext('ttt');
 	const bb = l.t.btn;
 
-	let modalIsOpen = false;
+	let modalIsOpen = $state(false);
 
 	/** @param {string} name */
 	function onDelete(name) {
@@ -29,7 +29,7 @@
 	}
 
 	/** @type {import('$lib/types').ISequence | undefined} */
-	let sequence2edit;
+	let sequence2edit = $state();
 	/** @param {string} name */
 	function onEdit(name) {
 		ldb.sequences.getOneByName(name).then((v) => {
@@ -73,8 +73,7 @@
 	/** @param {unknown} data */
 	function get_sequences_from_backup(data) {
 		if (Array.isArray(data)) return data;
-		/** @type {{data?: unknown}} */
-		const x = data;
+		const x = /** @type {{data?: unknown}} */ (data);
 		return Array.isArray(x.data) ? x.data : [];
 	}
 
@@ -119,63 +118,67 @@
 {/if}
 
 <MyLayout title={l.t.r.sequences.body.h}>
-	<svelte:fragment slot="list">
-		{#each $sequences as el}
-			<li>
-				<span> {el} </span>
+	{#snippet list()}
+	
+			{#each $sequences as el}
+				<li>
+					<span> {el} </span>
 
-				<div class="btns" style="font-size: .75em;">
-					<Btn
-						iconOnly
-						colored
-						accent="alpha"
-						variant="text"
-						on:click={() => onEdit(el)}
-						title={bb.edit}
-					>
-						<MyIcon name="edit" />
-					</Btn>
+					<div class="btns" style="font-size: .75em;">
+						<Btn
+							iconOnly
+							colored
+							accent="alpha"
+							variant="text"
+							on:click={() => onEdit(el)}
+							title={bb.edit}
+						>
+							<MyIcon name="edit" />
+						</Btn>
 
-					<Btn
-						title={bb.del}
-						colored
-						iconOnly
-						variant="text"
-						accent="danger"
-						on:click={() => onDelete(el)}
-						disabled={el === $currSequenceName}
-					>
-						<Icon name="delete" />
-					</Btn>
-				</div>
-			</li>
-		{/each}
-	</svelte:fragment>
+						<Btn
+							title={bb.del}
+							colored
+							iconOnly
+							variant="text"
+							accent="danger"
+							on:click={() => onDelete(el)}
+							disabled={el === $currSequenceName}
+						>
+							<Icon name="delete" />
+						</Btn>
+					</div>
+				</li>
+			{/each}
+		
+	{/snippet}
 
-	<div slot="btns" class="fce import-export-wrap-parent">
-		<Btn
-			on:click={onAdd}
-			accent="alpha"
-			variant="filled"
-			text={l.t.r.sequences.body.add}
-		/>
-		<div class="import-export-wrap">
+	{#snippet btns()}
+		<div  class="fce import-export-wrap-parent">
 			<Btn
-				type="button"
-				on:click={onExport}
-				accent="beta"
-				variant="outlined"
-				text="Export JSON"
+				on:click={onAdd}
+				accent="alpha"
+				variant="filled"
+				text={l.t.r.sequences.body.add}
 			/>
-			<Btn
-				type="button"
-				on:click={onImport}
-				accent="gamma"
-				variant="outlined"
-				text="Import JSON"
-			/>
+			<div class="import-export-wrap">
+				<Btn
+					type="button"
+					on:click={onExport}
+					accent="beta"
+					variant="outlined"
+					text="Export JSON"
+				/>
+				<Btn
+					type="button"
+					on:click={onImport}
+					accent="gamma"
+					variant="outlined"
+					text="Import JSON"
+				/>
+			</div>
 		</div>
-	</div>
+	{/snippet}
 </MyLayout>
 
 <style> 

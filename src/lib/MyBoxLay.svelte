@@ -2,24 +2,42 @@
 	import { getContext } from 'svelte';
 	/** @type {import('$lib/types').Localize } */
 	const l = getContext('ttt');
-	/** @type {import("@kazkadien/svelte/dist/types").Accent | ''} */
-	export let accent = '';
-	/** @type {string } */
-	export let heading;
+	
+	
 
-	/** @type {string | number} */
-	export let HH;
-	/** @type {string | number} */
-	export let MM;
-	/** @type {string | number} */
-	export let SS;
+	
+	
+	
 
-	/** @type {string } */
-	export let init_nums = '';
+	
 
-	export let with_controls = true;
-	export let days = 0;
-	export let with_label = false;
+	/**
+	 * @typedef {Object} Props
+	 * @property {'base' | 'alpha' | 'beta' | 'gamma' | 'danger' | ''} [accent]
+	 * @property {string } heading
+	 * @property {string | number} HH
+	 * @property {string | number} MM
+	 * @property {string | number} SS
+	 * @property {string } [init_nums]
+	 * @property {boolean} [with_controls]
+	 * @property {number} [days]
+	 * @property {boolean} [with_label]
+	 * @property {import('svelte').Snippet} [btns]
+	 */
+
+	/** @type {Props} */
+	let {
+		accent = '',
+		heading,
+		HH,
+		MM,
+		SS,
+		init_nums = '',
+		with_controls = true,
+		days = 0,
+		with_label = false,
+		btns
+	} = $props();
 </script>
 
 <div class={accent}>
@@ -50,7 +68,7 @@
 
 	{#if with_controls}
 		<div class="btns g-action-btns">
-			<slot name="btns"><!-- optional fallback --></slot>
+			{#if btns}{@render btns()}{:else}<!-- optional fallback -->{/if}
 		</div>
 	{/if}
 </div>

@@ -12,8 +12,14 @@
 	/** @type {import('$lib/types').Localize } */
 	const l = getContext('ttt');
 
-	/** @type {import('./AddAlarm.svelte').AlarmClockItem } */
-	export let ac;
+	
+	/**
+	 * @typedef {Object} Props
+	 * @property {import('./AddAlarm.svelte').AlarmClockItem } ac
+	 */
+
+	/** @type {Props} */
+	let { ac = $bindable() } = $props();
 	// console.log(ac);
 
 	let w = new Worker(new URL('$lib/worker_backward.js', import.meta.url), {
@@ -39,8 +45,8 @@
 		}
 	};
 
-	$: MM = ch(ac.min);
-	$: SS = ch(ac.sec);
+	let MM = $derived(ch(ac.min));
+	let SS = $derived(ch(ac.sec));
 
 	const data = { mes: msg.start, min: ac.min, sec: ac.sec };
 	w.postMessage(data);

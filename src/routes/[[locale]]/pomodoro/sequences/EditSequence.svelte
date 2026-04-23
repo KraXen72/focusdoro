@@ -1,6 +1,8 @@
 <script>
+	import { preventDefault } from 'svelte/legacy';
+
 	import { Btn, Field, Icon } from '@kazkadien/svelte';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, untrack } from 'svelte';
 	import CloseBtn from '$lib/CloseBtn.svelte';
 	import DataLists from './DataLists.svelte';
 	import SetBreak from './SetBreak.svelte';
@@ -14,23 +16,30 @@
 
 	const MAX_FOCUS_CYCLE = 90;
 
-	let data = {
+	let data = $state({
 		name: '',
 		focus: 30,
 		break: { short: 5, long: 20 }
-	};
+	});
 
-	/** @type {import('$lib/types').ISequence | undefined} */
-	export let seq;
+	
+	/**
+	 * @typedef {Object} Props
+	 * @property {import('$lib/types').ISequence | undefined} seq
+	 */
 
-	let count = 0;
+	/** @type {Props} */
+	const { seq } = $props();
+
+	let count = $state(0);
 	/** @type {import('$lib/types').IRound[]} */
-	let rounds = [];
+	let rounds = $state([]);
 
-	if (seq) {
-		data.name = seq.name;
-		count = seq.rounds.length;
-		rounds = seq.rounds;
+	const initial_seq = untrack(() => seq);
+	if (initial_seq) {
+		data.name = initial_seq.name;
+		count = initial_seq.rounds.length;
+		rounds = initial_seq.rounds;
 	}
 
 	function onAddRound() {
@@ -113,7 +122,7 @@
 
 <DataLists />
 
-<form class="form v2 alpha modal-box" on:submit|preventDefault={handleSubmit}>
+<form class="form v2 alpha modal-box" onsubmit={preventDefault(handleSubmit)}>
 	<CloseBtn on:click={() => dispatch('close')} />
 
 	<div class="card">

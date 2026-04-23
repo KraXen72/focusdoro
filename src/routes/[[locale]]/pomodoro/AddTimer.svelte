@@ -1,4 +1,4 @@
-<script context="module">
+<script module>
 	import { writable } from 'svelte/store';
 	/** @typedef {{min: number, sec: number, id: number, auto_close: boolean}} SimpleTimerItem */
 	/** @type {SimpleTimerItem[] } */
@@ -7,6 +7,8 @@
 </script>
 
 <script>
+	import { preventDefault } from 'svelte/legacy';
+
 	import { browser } from '$app/environment';
 	import CloseBtn from '$lib/CloseBtn.svelte';
 	import { BoxField, BoxFieldEntry, Btn, Modal } from '@kazkadien/svelte';
@@ -19,11 +21,11 @@
 	/** @type {import('$lib/types').Localize } */
 	const l = getContext('ttt');
 
-	let vv = {
+	let vv = $state({
 		hh: 0,
 		mm: 0,
 		ss: 0
-	};
+	});
 
 	const ls_timer_vals = 'timer_values';
 	// const ls_recent_timers = 'p_recent_timers';
@@ -71,7 +73,7 @@
 	// }
 
 	const ls_autoclose = 'auto_close_timers';
-	let is_autoclose = browser && !!localStorage.getItem(ls_autoclose);
+	let is_autoclose = $state(browser && !!localStorage.getItem(ls_autoclose));
 	/** @param {any} ev */
 	function on_change_autoclose(ev) {
 		// console.log(ev);
@@ -84,18 +86,22 @@
 	}
 
 	const ls_remember = 'remember_timer';
-	let is_remember = browser && !!localStorage.getItem(ls_remember);
+	let is_remember = $state(browser && !!localStorage.getItem(ls_remember));
 
-	if (is_remember) {
-		const v = localStorage.getItem(ls_timer_vals);
-		if (v) {
-			try {
-				const j = JSON.parse(v);
-				vv = j;
-			} catch (error) {
-				console.log(error);
+	if (browser) {
+		$effect(() => {
+			if (!is_remember) {
+				return;
 			}
-		}
+			const v = localStorage.getItem(ls_timer_vals);
+			if (v) {
+				try {
+					vv = JSON.parse(v);
+				} catch (error) {
+					console.log(error);
+				}
+			}
+		});
 	}
 
 	/** @param {any} ev */
@@ -109,7 +115,7 @@
 		}
 	}
 
-	let is_open = false;
+	let is_open = $state(false);
 </script>
 
 {#if is_open}
@@ -117,7 +123,7 @@
 		<div class="card alpha modal-box">
 			<CloseBtn on:click={() => (is_open = false)} />
 
-			<form class="form v2 alpha" on:submit|preventDefault={on_submit}>
+			<form class="form v2 alpha" onsubmit={preventDefault(on_submit)}>
 				<TimerForm {vv} />
 
 				<BoxField rows>
@@ -126,7 +132,7 @@
 							name="auto_close"
 							type="checkbox"
 							checked={is_autoclose}
-							on:change={on_change_autoclose}
+							onchange={on_change_autoclose}
 						/>
 					</BoxFieldEntry>
 
@@ -135,7 +141,7 @@
 							name="remember_timer"
 							type="checkbox"
 							checked={is_remember}
-							on:change={on_change_remember}
+							onchange={on_change_remember}
 						/>
 					</BoxFieldEntry>
 

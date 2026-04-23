@@ -11,10 +11,10 @@
 	import { timers } from './AddTimer.svelte';
 	import StopWatch from './StopWatch.svelte';
 	import { alarms } from './AddAlarm.svelte';
-	// import { page } from '$app/stores';
+	// import { page } from '$app/state';
 
 	/** @type {import('$lib/types').IRound[]} */
-	let rounds;
+	let rounds = $state(s6x30.rounds);
 	ldb.sequences.getOneByName($currSequenceName).then((one) => {
 		// console.log(one);
 		if (!one) {
@@ -54,9 +54,7 @@
 	</div>
 
 	<div id="mp">
-		{#if rounds}
-			<MainView {rounds} />
-		{/if}
+		<MainView {rounds} />
 	</div>
 </div>
 
@@ -71,7 +69,7 @@
 		/* background: darkolivegreen; */
 	}
 
-	/* :where(#mp, .pane) { */
+	/* :where(:global(#mp, .pane)) { */
 	/* 	margin-inline: 1em; */
 	/* } */
 
@@ -101,7 +99,7 @@
 		padding-block: 1em 8vh;
 	}
 
-	:where(#rp, #tp) {
+	:where(:global(#rp, #tp)) {
 		background: transparent;
 	}
 

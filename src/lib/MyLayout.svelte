@@ -1,25 +1,41 @@
 <script>
-	export let title = '';
+	/**
+	 * @typedef {Object} Props
+	 * @property {string} [title]
+	 * @property {import('svelte').Snippet} [top]
+	 * @property {import('svelte').Snippet} [list]
+	 * @property {import('svelte').Snippet} [children]
+	 * @property {import('svelte').Snippet} [btns]
+	 */
+
+	/** @type {Props} */
+	let {
+		title = '',
+		top,
+		list,
+		children,
+		btns
+	} = $props();
 </script>
 
 <div class="lay">
 	<div class="container">
-		<slot name="top" />
+		{@render top?.()}
 
 		{#if title}
 			<h3>{title}</h3>
 		{/if}
 
 		<ul class="table">
-			<slot name="list">
+			{#if list}{@render list()}{:else}
 				<li>list-item</li>
-			</slot>
+			{/if}
 		</ul>
 
-		<slot />
+		{@render children?.()}
 
 		<div class="btns">
-			<slot name="btns" />
+			{@render btns?.()}
 		</div>
 	</div>
 </div>

@@ -1,4 +1,4 @@
-<script context="module">
+<script module>
 	// let simple timers know if they can update the title
 	export const sh = { pomo_is_active: false, timers_is_active: false };
 </script>
@@ -94,7 +94,7 @@
 	}
 
 	/** @type {number | null} */
-	let overtime = null;
+	let overtime = $state(null);
 	function manageOvetime() {
 		if (!$opts.overtime) {
 			return;
@@ -113,7 +113,7 @@
 		}
 	}
 
-	let is_running = false;
+	let is_running = $state(false);
 	function startTimer() {
 		is_running = true;
 		const data = { mes: msg.start, min, sec };
@@ -141,8 +141,14 @@
 		}
 	}
 
-	/** @type {import('$lib/types').IRound[]} */
-	export let rounds;
+	
+	/**
+	 * @typedef {Object} Props
+	 * @property {import('$lib/types').IRound[]} rounds
+	 */
+
+	/** @type {Props} */
+	let { rounds = $bindable() } = $props();
 
 	let first = false;
 	const unsub = currSequenceName.subscribe(async (v) => {
@@ -172,11 +178,11 @@
 	});
 
 	// Clock
-	let min = rounds[0].focus.duration;
-	let sec = 0;
+	let min = $state(rounds[0].focus.duration);
+	let sec = $state(0);
 
-	$: MM = min < 10 ? '0' + min : min;
-	$: SS = sec < 10 ? '0' + sec : sec;
+	let MM = $derived(min < 10 ? '0' + min : min);
+	let SS = $derived(sec < 10 ? '0' + sec : sec);
 
 	function clearClock() {
 		min = rounds[index][phase].duration;
@@ -184,19 +190,19 @@
 	}
 	// Clock
 
-	let phaseLabel = rounds[0].focus.task;
+	let phaseLabel = $state(rounds[0].focus.task);
 	/** @type {'focus' | 'break'} */
-	let phase = 'focus';
-	let index = 0;
-	$: fullPhaseName =
-		phase === 'focus'
+	let phase = $state('focus');
+	let index = $state(0);
+	let fullPhaseName =
+		$derived(phase === 'focus'
 			? tr.focus
-			: `${tr[rounds[index].break.type]} ${tr.break}`;
+			: `${tr[rounds[index].break.type]} ${tr.break}`);
 
 	/** @type {Map<string, string[]>} */
 	let activitiesMap = new Map();
 	/** @type {string[]} */
-	let myActivites = [];
+	let myActivites = $state([]);
 
 	async function nextPhase() {
 		// console.log({ phase });
@@ -247,7 +253,7 @@
 	}
 
 	// Event handlers
-	let isPaused = false;
+	let isPaused = $state(false);
 	function handlePause() {
 		// console.log('pause');
 		is_running = false;
@@ -380,7 +386,7 @@
 		}
 	}
 
-	let modalIsOpen = false;
+	let modalIsOpen = $state(false);
 	function onCloseModal() {
 		// console.log('close');
 		modalIsOpen = false;
@@ -443,7 +449,7 @@
 			/>
 
 			{#each myActivites.sort((a, b) => a.localeCompare(b)) as el}
-				<button class="btn round text beta" on:click={() => onBreakSelect(el)}>
+				<button class="btn round text beta" onclick={() => onBreakSelect(el)}>
 					<span>{el}</span>
 				</button>
 			{/each}
@@ -507,7 +513,7 @@
 		<MyBtn
 			accent="alpha"
 			title={isPaused ? bb.resume : is_running ? bb.pause : bb.start}
-			on:click={() => {
+			onclick={() => {
 				if (isPaused) {
 					handleResume();
 				} else if (is_running) {
@@ -521,10 +527,10 @@
 				name={isPaused ? ii.play_arrow : is_running ? ii.pause : ii.play_arrow}
 			/>
 		</MyBtn>
-		<MyBtn accent="beta" title={bb.next} on:click={handleNext}>
+		<MyBtn accent="beta" title={bb.next} onclick={handleNext}>
 			<MyIcon name={ii.fast_forward} />
 		</MyBtn>
-		<MyBtn accent="danger" title={bb.reset} on:click={handleReset}>
+		<MyBtn accent="danger" title={bb.reset} onclick={handleReset}>
 			<MyIcon name={ii.cycle} />
 		</MyBtn>
 	</div>

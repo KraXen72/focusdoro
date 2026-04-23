@@ -1,23 +1,25 @@
 <script>
 	import { Dropdown } from '@kazkadien/svelte';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	// page.subscribe((p) => console.log(p));
 	// path.startsWith('/ua')
 
+	/** @type {Array<['en' | 'fr' | 'ua', string]>} */
 	const items = [
 		['en', 'English'],
 		['fr', 'Français'],
 		['ua', 'Українська']
 	];
 
+	/** @type {Record<'en' | 'fr' | 'ua', string>} */
 	const p = {
 		ua: '/ua',
 		fr: '/fr',
 		en: ''
 	};
-	/** @param {string} lang */
+	/** @param {'en' | 'fr' | 'ua'} lang */
 	function on_switch(lang) {
-		if (lang === $page.data.r.locale) {
+		if (lang === page.data.r.locale) {
 			return;
 		}
 		// console.log({ lang });
@@ -26,7 +28,7 @@
 		const route_without_lang = (/** @type {string} */ r) =>
 			r.replace(/^\/(fr|ua)/, '');
 
-		const x = route_without_lang($page.url.pathname);
+		const x = route_without_lang(page.url.pathname);
 		// const x = route_without_lang(window.location.pathname);
 		const n = p[lang] + x || '/';
 		// console.log(n);
@@ -35,7 +37,7 @@
 </script>
 
 <Dropdown
-	text={$page.data.r.locale}
+	text={page.data.r.locale}
 	variant="text"
 	round
 	accent="alpha"
@@ -43,7 +45,7 @@
 	align="right"
 >
 	{#each items as el}
-		<button class="btn text" on:click={() => on_switch(el[0])}>
+		<button class="btn text" onclick={() => on_switch(el[0])}>
 			<strong class="f-mono" lang="en">{el[0]} - </strong>
 			<span lang={el[0]}>{el[1]}</span>
 		</button>

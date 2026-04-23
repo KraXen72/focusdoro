@@ -1,11 +1,22 @@
 <script>
-	/** @typedef {import("@kazkadien/svelte/dist/types").Accent} Accent*/
-	/** @type Accent | '' */
-	export let accent = '';
-	/** @type {import("$typings/types").IMyIcon} */
-	export let name;
-	export let fill = 'currentColor';
-	export let width = '1.5em';
+	/** @typedef {'base' | 'alpha' | 'beta' | 'gamma' | 'danger'} Accent*/
+	
+	
+	/**
+	 * @typedef {Object} Props
+	 * @property {string} [accent]
+	 * @property {import("$typings/types").IMyIcon} name
+	 * @property {string} [fill]
+	 * @property {string} [width]
+	 */
+
+	/** @type {Props} */
+	let {
+		accent = '',
+		name,
+		fill = 'currentColor',
+		width = '1.5em'
+	} = $props();
 </script>
 
 <svg

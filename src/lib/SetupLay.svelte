@@ -1,9 +1,16 @@
 <script>
+	/**
+	 * @typedef {Object} Props
+	 * @property {import('svelte').Snippet} [children]
+	 */
+
+	/** @type {Props} */
+	let { children } = $props();
 </script>
 
 <article class="container">
 	<div class="card-x alpha">
-		<slot><!-- optional fallback --></slot>
+		{#if children}{@render children()}{:else}<!-- optional fallback -->{/if}
 	</div>
 </article>
 

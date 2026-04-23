@@ -16,7 +16,7 @@
 	/** @typedef {import('$lib/types').IStat} IStat */
 	/** @typedef {{month: string; times: IStat[], activities: [string, number][]}} MyStats */
 	/** @type {MyStats[]} */
-	let myStats = [];
+	let myStats = $state([]);
 
 	onMount(async () => {
 		/** @type {MyStats[]} */

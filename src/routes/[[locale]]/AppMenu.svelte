@@ -52,8 +52,8 @@
 	// 	});
 	// }
 
-	/** @type {HTMLDialogElement} */
-	let dialog;
+	/** @type {HTMLDialogElement | null} */
+	let dialog = $state(null);
 </script>
 
 <BtnIcon
@@ -61,17 +61,17 @@
 	title={l.t.it.menu}
 	round
 	variant="text"
-	on:click={() => dialog.showModal()}
+	on:click={() => dialog?.showModal()}
 />
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <dialog
 	bind:this={dialog}
-	on:click={(ev) => ev.target === dialog && dialog.close()}
+	onclick={(ev) => ev.target === dialog && dialog?.close()}
 >
 	<div class="card alpha modal-box">
-		<CloseBtn on:click={() => dialog.close()} />
+		<CloseBtn on:click={() => dialog?.close()} />
 
 		<div class="links alpha">
 			{#each links as el}
@@ -83,7 +83,7 @@
 								<a
 									{href}
 									class="btn text round"
-									on:click={() => dialog.close()}
+									onclick={() => dialog?.close()}
 								>
 									{name}
 								</a>

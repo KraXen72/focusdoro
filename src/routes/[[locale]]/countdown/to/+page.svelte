@@ -1,6 +1,8 @@
 <script>
+	import { preventDefault } from 'svelte/legacy';
+
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import SetupLay from '$lib/SetupLay.svelte';
 	import { Btn, Field, snack_new } from '@kazkadien/svelte';
 	import { getContext } from 'svelte';
@@ -9,15 +11,15 @@
 	const th = l.t.r.countdown_to.head;
 
 	const time_zones = Intl.supportedValuesOf('timeZone');
-	let tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+	let tz = $state(Intl.DateTimeFormat().resolvedOptions().timeZone);
 	// console.log(time_zones);
 	// console.log(ltz);
 	const now = new Date();
 	const today = now.toLocaleDateString('fr-CA');
 	// console.log({ today });
 
-	let date = today;
-	let time = '';
+	let date = $state(today);
+	let time = $state('');
 
 	function get_path() {
 		let date_str = date;
@@ -35,12 +37,12 @@
 		// const xl = new Date(dl);
 		// const xtz = new Date(dtz);
 		// console.log({ xl, xtz });
-		const url = $page.url.pathname + `/${dtz}`;
+		const url = page.url.pathname + `/${dtz}`;
 		// console.log(url);
 		return url;
 	}
 
-	let path = '';
+	let path = $state('');
 	function on_change() {
 		console.log('ch');
 		path = get_path();
@@ -78,8 +80,8 @@
 
 	<form
 		class="form v2 alpha"
-		on:submit|preventDefault={on_submit}
-		on:change={on_change}
+		onsubmit={preventDefault(on_submit)}
+		onchange={on_change}
 	>
 		<div>
 			<Field label={l.t.time.date}>

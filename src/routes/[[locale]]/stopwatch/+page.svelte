@@ -32,13 +32,13 @@
 	});
 
 	const init_title = th.title;
-	let title = init_title;
+	let title = $state(init_title);
 
 	/** @typedef {import('$lib/worker').WTime } WTime*/
 	/** @type {WTime} */
-	let time = { HH: '00', MM: '00', SS: '00' };
+	let time = $state({ HH: '00', MM: '00', SS: '00' });
 
-	let is_running = false;
+	let is_running = $state(false);
 
 	function handle_reset() {
 		w.postMessage({ msg: MSG_WF.reset });
@@ -50,10 +50,10 @@
 	}
 	/** @typedef {[number, string, string] } CycleItem */
 	/** @type {CycleItem[] } */
-	let cycles = [];
+	let cycles = $state([]);
 	let i = 1;
 	/** @type {WTime} */
-	let prev = { ...time };
+	let prev = { HH: '00', MM: '00', SS: '00' };
 
 	function handle_cycle() {
 		if (!is_running) {
@@ -99,14 +99,16 @@
 			MM={time.MM}
 			SS={time.SS}
 		>
-			<svelte:fragment slot="btns">
-				<MyBtn
-					text={is_running ? bb.pause : bb.start}
-					on:click={handle_start_stop}
-				/>
-				<MyBtn accent="beta" text={bb.cycle} on:click={handle_cycle} />
-				<MyBtn accent="danger" text={bb.reset} on:click={handle_reset} />
-			</svelte:fragment>
+			{#snippet btns()}
+					
+					<MyBtn
+						text={is_running ? bb.pause : bb.start}
+						onclick={handle_start_stop}
+					/>
+					<MyBtn accent="beta" text={bb.cycle} onclick={handle_cycle} />
+					<MyBtn accent="danger" text={bb.reset} onclick={handle_reset} />
+				
+					{/snippet}
 		</MyBoxLay>
 
 		{#if cycles.length}

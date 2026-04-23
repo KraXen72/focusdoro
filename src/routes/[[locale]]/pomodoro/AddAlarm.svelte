@@ -1,4 +1,4 @@
-<script context="module">
+<script module>
 	import { writable } from 'svelte/store';
 	/** @typedef {{min: number, sec: number, time: string, id: number, auto_close: boolean}} AlarmClockItem */
 	/** @type {AlarmClockItem[] } */
@@ -7,6 +7,8 @@
 </script>
 
 <script>
+	import { run, preventDefault } from 'svelte/legacy';
+
 	import CloseBtn from '$lib/CloseBtn.svelte';
 	import MyIcon from '$lib/MyIcon.svelte';
 	import { ch } from '$lib/utils';
@@ -16,13 +18,12 @@
 	/** @type {import('$lib/types').Localize } */
 	const l = getContext('ttt');
 
-	let is_open = false;
-	$: watch(is_open);
+	let is_open = $state(false);
 
 	const hhmm = (/** @type {Date} */ d) =>
 		ch(d.getHours()) + ':' + ch(d.getMinutes());
 
-	let time = '';
+	let time = $state('');
 
 	/** @param {boolean} val */
 	function watch(val) {
@@ -63,6 +64,9 @@
 		// console.log(dx);
 		is_open = false;
 	}
+	run(() => {
+		watch(is_open);
+	});
 </script>
 
 {#if is_open}
@@ -70,7 +74,7 @@
 		<div class="card alpha modal-box">
 			<CloseBtn on:click={() => (is_open = false)} />
 
-			<form class="form v2 alpha" on:submit|preventDefault={on_submit}>
+			<form class="form v2 alpha" onsubmit={preventDefault(on_submit)}>
 				<Field label={l.t.time.time}>
 					<input type="time" bind:value={time} required />
 				</Field>

@@ -1,4 +1,4 @@
-<script context="module">
+<script module>
 	import { ldb } from '$lib/db';
 	import { writable } from 'svelte/store';
 	/** @type {import('$lib/types').IStat} */
@@ -72,8 +72,8 @@
 	}
 
 	// $: total = toHoursAndMinutes(120);
-	$: totalFocus = toHoursAndMinutes($stats4today.focus.total);
-	$: totalBreak = toHoursAndMinutes($stats4today.break.total);
+	let totalFocus = $derived(toHoursAndMinutes($stats4today.focus.total));
+	let totalBreak = $derived(toHoursAndMinutes($stats4today.break.total));
 </script>
 
 <section class="fsb">

@@ -8,7 +8,7 @@
 
 	// for ssr=true
 	/** @type {typeof import("./MyPage.svelte").default | null} */
-	let comp = null;
+	let comp = $state(null);
 	onMount(async () => {
 		comp = (await import('./MyPage.svelte')).default;
 	});
@@ -26,7 +26,8 @@
 <article>
 	<div>
 		{#if comp}
-			<svelte:component this={comp} />
+			{@const SvelteComponent = comp}
+			<SvelteComponent />
 		{/if}
 	</div>
 

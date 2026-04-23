@@ -1,7 +1,7 @@
 import { MSG_WF } from './vars';
 import { ch } from './utils';
 
-const INTERVAL = import.meta.env.DEV ? 10 : 1000;
+const INTERVAL = 1000;
 /** @type {ReturnType<setInterval>} */
 let interval_id;
 
@@ -55,6 +55,7 @@ function handle(e) {
 	}
 
 	if (e.data.msg === MSG_WF.start) {
+		interval_id && clearInterval(interval_id);
 		interval_id = setInterval(on_tick, INTERVAL);
 	}
 }

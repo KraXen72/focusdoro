@@ -30,29 +30,33 @@
 
 		<h2>this browser date info</h2>
 		<table>
-			<tr> <td>time format</td> <td>{t}</td> </tr>
-			<tr> <td>time format 2</td> <td>{t2}</td> </tr>
-			<tr> <td>Unix Time</td> <td>{u}</td> </tr>
-			<tr> <td>Time Zone</td> <td>{tz}</td> </tr>
-			<tr> <td>Time Zone Offset</td> <td>{t0}</td> </tr>
-			<tr> <td>Locale</td> <td>{l}</td> </tr>
+			<tbody>
+				<tr> <td>time format</td> <td>{t}</td> </tr>
+				<tr> <td>time format 2</td> <td>{t2}</td> </tr>
+				<tr> <td>Unix Time</td> <td>{u}</td> </tr>
+				<tr> <td>Time Zone</td> <td>{tz}</td> </tr>
+				<tr> <td>Time Zone Offset</td> <td>{t0}</td> </tr>
+				<tr> <td>Locale</td> <td>{l}</td> </tr>
+			</tbody>
 		</table>
 
 		<h2>this browser supported time zones</h2>
 		<!-- <li>Time zone</li> -->
 		<table>
-			<tr>
-				<td>Time Zone</td>
-				<td>Time</td>
-				<td>GMT</td>
-			</tr>
-			{#each time_zones as val}
+			<tbody>
 				<tr>
-					<td lang="en"> {val[0]} </td>
-					<td> {val[1]} </td>
-					<td> {val[2]} </td>
+					<td>Time Zone</td>
+					<td>Time</td>
+					<td>GMT</td>
 				</tr>
-			{/each}
+				{#each time_zones as val}
+					<tr>
+						<td lang="en"> {val[0]} </td>
+						<td> {val[1]} </td>
+						<td> {val[2]} </td>
+					</tr>
+				{/each}
+			</tbody>
 		</table>
 	</div>
 </article>

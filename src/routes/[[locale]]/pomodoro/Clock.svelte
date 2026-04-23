@@ -1,11 +1,22 @@
 <script>
-	/** @type {number | string} */
-	export let MM;
-	/** @type {number | string} */
-	export let SS;
+	
+	
 
-	export let is_running = false;
-	export let is_overtime = false;
+	/**
+	 * @typedef {Object} Props
+	 * @property {number | string} MM
+	 * @property {number | string} SS
+	 * @property {boolean} [is_running]
+	 * @property {boolean} [is_overtime]
+	 */
+
+	/** @type {Props} */
+	let {
+		MM,
+		SS,
+		is_running = false,
+		is_overtime = false
+	} = $props();
 </script>
 
 <time class="font-x" class:is_running class:is_overtime>

@@ -9,14 +9,21 @@
 	import '../../css/list.css';
 	import '../../css/dialog.css';
 	import { page } from '$app/stores';
-	import { onDestroy, onMount, setContext } from 'svelte';
+	import { onDestroy, onMount, setContext, untrack } from 'svelte';
 	// import { browser } from '$app/environment';
 	// page.subscribe((v) => console.log(v));
 
-	/** @type {import('./$types').LayoutData} */
-	export let data;
+	
+	/**
+	 * @typedef {Object} Props
+	 * @property {import('./$types').LayoutData} data
+	 * @property {import('svelte').Snippet} [children]
+	 */
+
+	/** @type {Props} */
+	const { data, children } = $props();
 	// console.log({ ...data });
-	setContext('ttt', { ...data });
+	setContext('ttt', untrack(() => ({ ...data })));
 	const origin = 'https://focus.delphic.top';
 	// const origin = 'https://www.timerone.com';
 	const route_without_locale_prefix = (/** @type {string} */ r) =>
@@ -30,9 +37,9 @@
 
 	const my_locales = Object.values(l);
 	// route without locales
-	let route = '/';
+	let route = $state('/');
 
-	const locale = data.r.locale;
+	const locale = untrack(() => data.r.locale);
 	// const lang = data.r.lang;
 
 	const unsub = page.subscribe((p) => {
@@ -61,7 +68,7 @@
 	onDestroy(() => unsub());
 
 	/** @type {typeof import("./JSPerf.svelte").default | null} */
-	let comp = null;
+	let comp = $state(null);
 	onMount(async () => {
 		let is_mobile_or_tablet = false;
 		(function (a) {
@@ -74,7 +81,7 @@
 				)
 			)
 				is_mobile_or_tablet = true;
-		})(navigator.userAgent || navigator.vendor || window.opera);
+		})(navigator.userAgent || navigator.vendor);
 		// console.log({ is_mobile_or_tablet });
 
 		if (is_mobile_or_tablet) {
@@ -110,7 +117,7 @@
 			<AppHeader />
 
 			<main>
-				<slot />
+				{@render children?.()}
 			</main>
 		</div>
 
@@ -118,7 +125,8 @@
 	</div>
 
 	{#if comp}
-		<svelte:component this={comp} />
+		{@const SvelteComponent = comp}
+		<SvelteComponent />
 	{/if}
 </AppWrapper>
 

@@ -4,15 +4,21 @@
 	/** @type {import('$lib/types').Localize } */
 	const l = getContext('ttt');
 
-	/** @type {import('./$types').PageData} */
-	export let data;
+	
+	/**
+	 * @typedef {Object} Props
+	 * @property {import('./$types').PageData} data
+	 */
+
+	/** @type {Props} */
+	let { data } = $props();
 	// console.log(data);
 
-	let autostart = false;
-	let t = { hh: 0, mm: 0, ss: 0 };
-	let days = 0;
+	let autostart = $state(false);
+	let t = $state({ hh: 0, mm: 0, ss: 0 });
+	let days = $state(0);
 
-	let heading = '';
+	let heading = $state('');
 
 	(() => {
 		try {

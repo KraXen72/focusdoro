@@ -7,10 +7,11 @@
 	const th = l.t.r.countdown.head;
 	const tb = l.t.r.countdown.body;
 
-	let is_set = false;
+	let is_set = $state(false);
 	// let t = { min: 0, sec: 0 };
-	let t = { hh: 0, mm: 0, ss: 0 };
+	let t = $state({ hh: 0, mm: 0, ss: 0 });
 
+	/** @param {{detail: {hh: number, mm: number, ss: number}}} ev */
 	function handle_start(ev) {
 		t = ev.detail;
 		// console.log(t);

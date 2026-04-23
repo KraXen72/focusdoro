@@ -6,11 +6,11 @@
 	/** @type {import('$lib/types').Localize } */
 	const l = getContext('ttt');
 
-	export let vv = {
+	let { vv = $bindable({
 		hh: 0,
 		mm: 0,
 		ss: 0
-	};
+	}) } = $props();
 
 	/** @param {number} hours */
 	function on_add_hours(hours) {
@@ -45,8 +45,8 @@
 		vv.ss = n < 0 ? 0 : n;
 	}
 
-	/** @type {Array<typeof vv> } */
-	let recent_timers = [];
+	/** @type {{ hh: number; mm: number; ss: number; }[]} */
+	let recent_timers = $state([]);
 	// console.log({ recent_timers });
 
 	onMount(() => {
@@ -74,7 +74,7 @@
 						.map((v) => ch(v))
 						.join(':')}
 					on:click={() => {
-						on_sub_recent(el);
+						on_sub_recent(/** @type {{ hh: number; mm: number; ss: number; }} */ (el));
 					}}
 				/>
 			{/each}

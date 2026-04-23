@@ -1,4 +1,4 @@
-<script context="module">
+<script module>
 	export const VISIBILITY_STATE = {
 		hidden: 'hidden',
 		visible: 'visible'

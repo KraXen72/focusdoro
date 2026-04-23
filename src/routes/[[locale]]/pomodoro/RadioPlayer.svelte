@@ -34,11 +34,14 @@
 		}
 	}
 
-	/** @type {HTMLAudioElement} */
-	let audio;
-	let paused = true;
+	/** @type {HTMLAudioElement | null} */
+	let audio = $state(null);
+	let paused = $state(true);
 
 	function switchState() {
+		if (!audio) {
+			return;
+		}
 		if (audio.paused) {
 			audio.play();
 			audio && (audio.volume = volume / 100);
@@ -47,25 +50,28 @@
 		}
 	}
 
-	let audioCanPlay = false;
+	let audioCanPlay = $state(false);
 	function oncanplay() {
+		if (!audio) {
+			return;
+		}
 		audioCanPlay = true;
 		// console.log('canplay ');
 		autoPlay && audio.play();
 	}
 
 	const LS_VOLUME = '__Radio_Volume';
-	let volume = 80;
+	let volume = $state(80);
 	function onVol() {
 		audio && (audio.volume = volume / 100);
 		localStorage.setItem(LS_VOLUME, JSON.stringify(volume));
 	}
 
-	/** @type {import('$lib/types').IRadioStation} */
-	let activeStation;
+	/** @type {import('$lib/types').IRadioStation | null} */
+	let activeStation = $state(null);
 
 	/** @type {import('$lib/types').IRadioStation[]} */
-	let myStations = [];
+	let myStations = $state([]);
 
 	ldb.stations.list().then((v) => {
 		// myStations = v;
@@ -102,7 +108,7 @@
 		crossorigin="anonymous"
 		bind:this={audio}
 		bind:paused
-		on:canplay={oncanplay}
+		{oncanplay}
 	>
 		<source src={activeStation.src} />
 	</audio>
@@ -123,9 +129,9 @@
 		</Btn>
 
 		<Field label={l.t.it.radio}>
-			<select on:input={(e) => onSelect(e.currentTarget.value)}>
+			<select oninput={(e) => onSelect(e.currentTarget.value)}>
 				{#each myStations as val}
-					<option value={val.id} selected={val.id === activeStation.id}>
+					<option value={val.id} selected={val.id === activeStation?.id}>
 						{val.name}
 					</option>
 				{/each}
@@ -152,7 +158,7 @@
 				max="100"
 				step="1"
 				bind:value={volume}
-				on:input={onVol}
+				oninput={onVol}
 			/>
 		</Field>
 		<!-- <span>{volume}%</span> -->

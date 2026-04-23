@@ -3,8 +3,14 @@
 	/** @type {import('$lib/types').Localize } */
 	const l = getContext('ttt');
 
-	/** @type {[string, number][]} */
-	export let activities = [];
+	
+	/**
+	 * @typedef {Object} Props
+	 * @property {[string, number][]} [activities]
+	 */
+
+	/** @type {Props} */
+	let { activities = [] } = $props();
 </script>
 
 <table>

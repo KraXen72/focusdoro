@@ -8,12 +8,18 @@
 		break: l.t.timers.pomodoro.phase.break
 	};
 
-	export let overtime = 0;
 
-	/** @type {import("$typings/types").Phase} */
-	export let phase;
+	
+	/**
+	 * @typedef {Object} Props
+	 * @property {number} [overtime]
+	 * @property {import("$typings/types").Phase} phase
+	 */
 
-	$: overdue = overtime < 10 ? '0' + overtime : overtime;
+	/** @type {Props} */
+	let { overtime = 0, phase } = $props();
+
+	let overdue = $derived(overtime < 10 ? '0' + overtime : overtime);
 </script>
 
 {#if overtime}

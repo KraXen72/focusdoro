@@ -4,11 +4,17 @@
 	const dispatch = createEventDispatcher();
 
 	/** @typedef {import('$typings/types').Phase} Phase*/
-	/** @type {Phase} */
-	export let phase;
-	export let index = 0;
-	/** @type {import('$lib/types').IRound[]}*/
-	export let list = [];
+	
+	
+	/**
+	 * @typedef {Object} Props
+	 * @property {Phase} phase
+	 * @property {number} [index]
+	 * @property {import('$lib/types').IRound[]} [list]
+	 */
+
+	/** @type {Props} */
+	let { phase, index = 0, list = [] } = $props();
 
 	/**
 	 * @param {number} i
@@ -25,7 +31,7 @@
 		<div class="row alpha">
 			{#each list as e, i}
 				<button
-					on:click={() => on_select_block(i, 'focus')}
+					onclick={() => on_select_block(i, 'focus')}
 					title={e.focus.task}
 					class="{e.focus.icon.accent} btn text icon-only"
 					class:active={i === index && phase === 'focus'}
@@ -39,7 +45,7 @@
 		<div class="row beta">
 			{#each list as e, i}
 				<button
-					on:click={() => on_select_block(i, 'break')}
+					onclick={() => on_select_block(i, 'break')}
 					title={e.break.activity}
 					class="{e.break.icon.accent} btn text icon-only"
 					class:active={i === index && phase !== 'focus'}

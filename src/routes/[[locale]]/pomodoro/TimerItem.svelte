@@ -14,10 +14,16 @@
 	/** @type {import('$lib/types').Localize } */
 	const l = getContext('ttt');
 
-	/** @type {number } */
-	export let idx;
-	/** @type {import('./AddTimer.svelte').SimpleTimerItem } */
-	export let st;
+	
+	
+	/**
+	 * @typedef {Object} Props
+	 * @property {number } idx
+	 * @property {import('./AddTimer.svelte').SimpleTimerItem } st
+	 */
+
+	/** @type {Props} */
+	let { idx, st = $bindable() } = $props();
 
 	let w = new Worker(new URL('$lib/worker_backward.js', import.meta.url), {
 		type: 'module'
@@ -58,8 +64,8 @@
 	const m0 = ch(st.min);
 	const s0 = ch(st.sec);
 
-	$: MM = ch(st.min);
-	$: SS = ch(st.sec);
+	let MM = $derived(ch(st.min));
+	let SS = $derived(ch(st.sec));
 
 	const data = { mes: msg.start, min: st.min, sec: st.sec };
 	w.postMessage(data);

@@ -7,12 +7,14 @@
 	/** @param {{ detail: string; }} e */
 	function onWindowVisibilityChange(e) {
 		// console.log(e.detail);
+		/** @type {any} */
+		const n = noise;
 		if (e.detail === VISIBILITY_STATE.hidden) {
 			windowIsVisible = false;
-			noise.play();
+			n.play();
 		} else {
 			windowIsVisible = true;
-			noise.stop();
+			n.stop();
 		}
 		// console.log({ windowIsVisible });
 	}

@@ -1,4 +1,6 @@
 <script>
+	import { preventDefault } from 'svelte/legacy';
+
 	import { Btn, Field } from '@kazkadien/svelte';
 	import { createEventDispatcher } from 'svelte';
 	import CloseBtn from '$lib/CloseBtn.svelte';
@@ -6,12 +8,18 @@
 
 	const dispatch = createEventDispatcher();
 
-	/** @type {import('$lib/types').IRadioStation } */
-	export let station = {
+	
+	/**
+	 * @typedef {Object} Props
+	 * @property {import('$lib/types').IRadioStation } [station]
+	 */
+
+	/** @type {Props} */
+	let { station = $bindable({
 		id: performance.now(),
 		name: '',
 		src: ''
-	};
+	}) } = $props();
 
 	function handleSubmit() {
 		// console.log(station);
@@ -24,7 +32,7 @@
 <form
 	lang="en"
 	class="form v2 alpha modal-box"
-	on:submit|preventDefault={handleSubmit}
+	onsubmit={preventDefault(handleSubmit)}
 >
 	<CloseBtn on:click={() => dispatch('close')} />
 

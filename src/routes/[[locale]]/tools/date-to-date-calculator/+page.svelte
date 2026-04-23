@@ -1,4 +1,6 @@
 <script>
+	import { preventDefault } from 'svelte/legacy';
+
 	import SetupLay from '$lib/SetupLay.svelte';
 	import { Btn, Field } from '@kazkadien/svelte';
 	import { getContext } from 'svelte';
@@ -12,8 +14,8 @@
 	const today = now.toLocaleDateString('fr-CA');
 	// console.log({ today });
 
-	let date1 = today;
-	let date2 = '';
+	let date1 = $state(today);
+	let date2 = $state('');
 
 	function calculate() {
 		// console.log({ date1, date2 });
@@ -70,7 +72,7 @@
 		return value;
 	}
 	/** @type {ReturnType<calculate> | null } */
-	let r = null;
+	let r = $state(null);
 	function on_submit() {
 		r = calculate();
 	}
@@ -96,7 +98,7 @@
 		<p>{tb.p}</p>
 	</header>
 
-	<form class="form v2 alpha" on:submit|preventDefault={on_submit}>
+	<form class="form v2 alpha" onsubmit={preventDefault(on_submit)}>
 		<Field label="{l.t.time.date} 1">
 			<input type="date" bind:value={date1} required />
 		</Field>

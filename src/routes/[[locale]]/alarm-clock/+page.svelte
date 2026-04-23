@@ -8,7 +8,7 @@
 	const tb = l.t.r.alarm_clock.body;
 
 	const now = new Date();
-	let current = now.toLocaleString();
+	let current = $state(now.toLocaleString());
 	const id = setInterval(() => {
 		current = new Date().toLocaleString();
 	}, 1000);

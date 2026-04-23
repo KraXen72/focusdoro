@@ -1,5 +1,5 @@
 <script>
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import CloseBtn from '$lib/CloseBtn.svelte';
 	import { opts } from '$store/settings';
 	import { notificationsAreOn } from '$store/store';
@@ -16,7 +16,7 @@
 	const to = l.t.opts;
 	const pre = l.r.prefix;
 
-	let is_open = false;
+	let is_open = $state(false);
 
 	const links = [
 		{ href: pre + '/pomodoro/sequences', name: l.t.r.sequences.body.h },
@@ -62,7 +62,7 @@
 							</BoxFieldEntry>
 						</BoxField>
 
-						{#if $page.route.id?.startsWith('/[[locale]]/pomodoro')}
+						{#if page.route.id?.startsWith('/[[locale]]/pomodoro')}
 							<div class="pomo fsb">
 								<BoxField label={to.group.pomo} rows={true}>
 									{#if $notificationsAreOn || $opts.alarm}
@@ -117,7 +117,7 @@
 			</section>
 
 			<footer>
-				{#if $page.route.id === '/[[locale]]/pomodoro'}
+				{#if page.route.id === '/[[locale]]/pomodoro'}
 					{#if $notificationsAreOn || $opts.alarm}
 						<p>{to.etc.remind}</p>
 					{/if}
@@ -138,7 +138,7 @@
 						<a
 							{href}
 							class="btn text round filled"
-							on:click={() => (is_open = false)}
+							onclick={() => (is_open = false)}
 						>
 							{name}
 						</a>
@@ -150,7 +150,7 @@
 {/if}
 
 <style>
-	:where(form, .boxes) {
+	:where(:global(form, .boxes)) {
 		display: grid;
 		gap: 2rem;
 	}

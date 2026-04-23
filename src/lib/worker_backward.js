@@ -1,10 +1,7 @@
 // no import $aliases
 import { msg } from '$lib/vars';
 
-let INTERVAL = 1000;
-if (import.meta.env.DEV) {
-	INTERVAL = 100;
-}
+const INTERVAL = 1000;
 
 let sendTickEverySecond = true;
 
@@ -52,6 +49,7 @@ function tick() {
 /** @type {ReturnType<setInterval>} */
 let intervalID;
 function startTimer() {
+	clearInterval(intervalID);
 	intervalID = setInterval(tick, INTERVAL);
 }
 function stopTimer() {

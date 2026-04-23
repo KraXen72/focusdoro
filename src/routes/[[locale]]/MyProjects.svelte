@@ -63,7 +63,7 @@
 		color: var(--__fg);
 	}
 
-	a:is(:hover, :focus-visible) {
+	a:is(:global(:hover, :focus-visible)) {
 		color: var(--__fg);
 	}
 </style>

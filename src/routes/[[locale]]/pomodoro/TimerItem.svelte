@@ -9,7 +9,7 @@
 	import { timers } from './AddTimer.svelte';
 	import { ch } from '$lib/utils';
 	import MyIcon from '$lib/MyIcon.svelte';
-	import { audio } from '$lib/audio';
+	import { playAlarm } from '$lib/audio';
 	import { getContext } from 'svelte';
 	/** @type {import('$lib/types').Localize } */
 	const l = getContext('ttt');
@@ -41,7 +41,7 @@
 			sh.timers_is_active = false;
 			// console.log('finish');
 			if ($opts.notifications) sendNotification('Timer');
-			if ($opts.alarm) audio.play();
+			if ($opts.alarm) playAlarm();
 
 			if (st.auto_close) {
 				setTimeout(() => {

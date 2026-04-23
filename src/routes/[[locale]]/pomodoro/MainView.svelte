@@ -21,7 +21,7 @@
 	import { opts } from '$store/settings';
 	import MyTitle, { my_title } from './MyTitle.svelte';
 	import MyBtn from '$lib/MyBtn.svelte';
-	import { audio } from '$lib/audio';
+	import { playAlarm } from '$lib/audio';
 	import { getContext } from 'svelte';
 	import MyIcon from '$lib/MyIcon.svelte';
 	/** @type {import('$lib/types').Localize } */
@@ -89,7 +89,7 @@
 		}
 
 		if ($opts.alarm) {
-			audio.play();
+			playAlarm();
 		}
 	}
 
@@ -223,7 +223,7 @@
 		}
 
 		if ($opts.alarm) {
-			audio.play();
+			playAlarm();
 		}
 
 		is_running = false;

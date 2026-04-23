@@ -7,7 +7,7 @@
 	import { timers } from './AddTimer.svelte';
 	import { ch } from '$lib/utils';
 	import MyIcon from '$lib/MyIcon.svelte';
-	import { audio } from '$lib/audio';
+	import { playAlarm } from '$lib/audio';
 	import { getContext } from 'svelte';
 	/** @type {import('$lib/types').Localize } */
 	const l = getContext('ttt');
@@ -29,7 +29,7 @@
 		if (e.data.mes == msg.finish) {
 			// console.log('finish');
 			if ($opts.notifications) sendNotification('Alarm');
-			if ($opts.alarm) audio.play();
+			if ($opts.alarm) playAlarm();
 
 			if (ac.auto_close) {
 				setTimeout(() => {

@@ -7,7 +7,7 @@
 	import { ch } from '$lib/utils';
 	import MyBtn from '$lib/MyBtn.svelte';
 	import MyBoxLay from '$lib/MyBoxLay.svelte';
-	import { audio } from '$lib/audio';
+	import { playAlarm } from '$lib/audio';
 	import { getContext } from 'svelte';
 	/** @type {import('$lib/types').Localize } */
 	const l = getContext('ttt');
@@ -64,7 +64,7 @@
 				is_finished = true;
 				is_running = false;
 				if ($opts.notifications) sendNotification('Timer');
-				if ($opts.alarm) audio.play();
+				if ($opts.alarm) playAlarm();
 			}
 		};
 

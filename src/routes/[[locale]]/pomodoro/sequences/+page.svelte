@@ -152,32 +152,40 @@
 		{/each}
 	</svelte:fragment>
 
-	<div slot="btns" class="fce">
-		<Btn
-			type="button"
-			on:click={onExport}
-			accent="beta"
-			variant="outlined"
-			text="Export JSON"
-		/>
-		<Btn
-			type="button"
-			on:click={onImport}
-			accent="gamma"
-			variant="outlined"
-			text="Import JSON"
-		/>
+	<div slot="btns" class="fce import-export-wrap-parent">
 		<Btn
 			on:click={onAdd}
 			accent="alpha"
 			variant="filled"
 			text={l.t.r.sequences.body.add}
 		/>
+		<div class="import-export-wrap">
+			<Btn
+				type="button"
+				on:click={onExport}
+				accent="beta"
+				variant="outlined"
+				text="Export JSON"
+			/>
+			<Btn
+				type="button"
+				on:click={onImport}
+				accent="gamma"
+				variant="outlined"
+				text="Import JSON"
+			/>
+		</div>
 	</div>
 </MyLayout>
 
-<!-- <style> -->
-<!-- 	.btns { -->
-<!-- 		font-size: 0.75em; -->
-<!-- 	} -->
-<!-- </style> -->
+<style> 
+	.import-export-wrap-parent {
+		display: flex;
+		flex-direction: column;
+	}
+	.import-export-wrap {
+		margin-block-start: .5rem;
+		display: flex;
+		gap: .75rem;
+	}
+</style>

@@ -211,6 +211,16 @@
 		class="form v2 alpha end"
 		on:submit|preventDefault={handleSubmitNewActivity}
 	>
+		<Field label={tb.new_activity}>
+			<input
+			bind:value={action}
+			type="text"
+			required
+			maxlength="240"
+			minlength="2"
+			placeholder="Plank"
+			/>
+		</Field>
 		<div class="backup-btns">
 			<Btn
 				type="button"
@@ -227,16 +237,6 @@
 				text="Import JSON"
 			/>
 		</div>
-		<Field label={tb.new_activity}>
-			<input
-				bind:value={action}
-				type="text"
-				required
-				maxlength="240"
-				minlength="2"
-				placeholder="Plank"
-			/>
-		</Field>
 	</form>
 </MyLayout>
 
@@ -283,6 +283,7 @@
 		display: flex;
 		gap: 0.75rem;
 		flex-wrap: wrap;
+		margin-block-start: 1rem;
 	}
 
 	.notes {

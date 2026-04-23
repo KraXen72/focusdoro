@@ -15,6 +15,7 @@
 	import MyIcon from '$lib/MyIcon.svelte';
 	import { LS } from '$lib/vars';
 	import { add_recent_timers } from '$lib/utils';
+	import { ensureAlarmPermission } from '$lib/audio';
 	/** @type {import('$lib/types').Localize } */
 	const l = getContext('ttt');
 
@@ -51,6 +52,7 @@
 		// dispatch('close');
 		is_open = false;
 
+		ensureAlarmPermission();
 		add_recent_timers(LS.recent_timers, vv);
 		// console.log(recent_timers);
 	}

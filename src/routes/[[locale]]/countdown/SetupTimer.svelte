@@ -5,6 +5,7 @@
 	import TimerForm from './TimerForm.svelte';
 	import { add_recent_timers } from '$lib/utils';
 	import { LS } from '$lib/vars';
+	import { ensureAlarmPermission } from '$lib/audio';
 	/** @type {import('$lib/types').Localize } */
 	const l = getContext('ttt');
 
@@ -31,6 +32,7 @@
 		}
 
 		const data = vv;
+		ensureAlarmPermission();
 		add_recent_timers(LS.recent_timers, vv);
 		dispatch('start', data);
 	}

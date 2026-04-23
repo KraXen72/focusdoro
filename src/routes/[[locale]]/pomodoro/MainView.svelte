@@ -21,7 +21,7 @@
 	import { opts } from '$store/settings';
 	import MyTitle, { my_title } from './MyTitle.svelte';
 	import MyBtn from '$lib/MyBtn.svelte';
-	import { playAlarm } from '$lib/audio';
+	import { ensureAlarmPermission, playAlarm } from '$lib/audio';
 	import { getContext } from 'svelte';
 	import MyIcon from '$lib/MyIcon.svelte';
 	/** @type {import('$lib/types').Localize } */
@@ -265,6 +265,9 @@
 
 	function handleStart(isClick = false) {
 		overtime = null;
+		if (isClick) {
+			ensureAlarmPermission();
+		}
 		// console.log('on start');
 		if (phase === 'focus') {
 			return startTimer();

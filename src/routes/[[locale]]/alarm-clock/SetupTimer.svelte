@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { ch } from '$lib/utils';
+	import { ensureAlarmPermission } from '$lib/audio';
 	import { Btn, Field } from '@kazkadien/svelte';
 	// import { createEventDispatcher } from 'svelte';
 	import { getContext } from 'svelte';
@@ -38,6 +39,7 @@
 		// dispatch('start', d2);
 
 		const url = $page.data.r.prefix + `/countdown/to/${d2}`;
+		ensureAlarmPermission();
 		goto(url);
 	}
 </script>

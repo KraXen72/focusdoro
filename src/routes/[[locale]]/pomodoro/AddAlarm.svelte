@@ -12,6 +12,7 @@
 	import { ch } from '$lib/utils';
 	import { Btn, Field, Modal } from '@kazkadien/svelte';
 	import { getContext } from 'svelte';
+	import { ensureAlarmPermission } from '$lib/audio';
 	/** @type {import('$lib/types').Localize } */
 	const l = getContext('ttt');
 
@@ -58,6 +59,7 @@
 			v.push({ time, min, sec, id: performance.now(), auto_close: true });
 			return v;
 		});
+		ensureAlarmPermission();
 		// console.log(dx);
 		is_open = false;
 	}

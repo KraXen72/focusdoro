@@ -7,7 +7,7 @@
 	import { ch } from '$lib/utils';
 	import MyBtn from '$lib/MyBtn.svelte';
 	import MyBoxLay from '$lib/MyBoxLay.svelte';
-	import { playAlarm } from '$lib/audio';
+	import { ensureAlarmPermission, playAlarm } from '$lib/audio';
 	import { getContext } from 'svelte';
 	/** @type {import('$lib/types').Localize } */
 	const l = getContext('ttt');
@@ -105,12 +105,14 @@
 	function handle_play() {
 		// console.log('play');
 		if (is_finished) {
+			ensureAlarmPermission();
 			return start_ticking();
 		}
 		if (is_running) {
 			is_running = false;
 			w?.postMessage({ mes: msg.stop });
 		} else {
+			ensureAlarmPermission();
 			is_running = true;
 			w?.postMessage({ mes: msg.resume });
 		}

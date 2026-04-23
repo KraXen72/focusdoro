@@ -2,6 +2,10 @@
 	import MyLayout from '$lib/MyLayout.svelte';
 	import { ldb } from '$lib/db';
 	import { Btn, Field, Icon } from '@kazkadien/svelte';
+	import {
+		download_json_backup,
+		pick_json_backup_with_retry
+	} from '$lib/backup';
 	import { getContext } from 'svelte';
 	/** @type {import('$lib/types').Localize } */
 	const l = getContext('ttt');
@@ -74,6 +78,70 @@
 		upsert();
 		action = '';
 	}
+
+	/** @param {unknown} v */
+	function is_valid_activity_list(v) {
+		if (!v || typeof v !== 'object') return false;
+		/** @type {{name?: unknown, values?: unknown}} */
+		const one = v;
+		if (typeof one.name !== 'string' || !one.name.trim()) return false;
+		return Array.isArray(one.values) && one.values.every((x) => typeof x === 'string');
+	}
+
+	/** @param {unknown} data */
+	function is_valid_breaks_backup(data) {
+		if (Array.isArray(data)) {
+			return data.length > 0 && data.every(is_valid_activity_list);
+		}
+		if (!data || typeof data !== 'object') return false;
+		/** @type {{type?: unknown, version?: unknown, data?: unknown}} */
+		const x = data;
+		return (
+			x.type === 'focusdoro-breaks' &&
+			x.version === 1 &&
+			Array.isArray(x.data) &&
+			x.data.length > 0 &&
+			x.data.every(is_valid_activity_list)
+		);
+	}
+
+	/** @param {unknown} data */
+	function get_activity_lists_from_backup(data) {
+		if (Array.isArray(data)) return data;
+		/** @type {{data?: unknown}} */
+		const x = data;
+		return Array.isArray(x.data) ? x.data : [];
+	}
+
+	async function onExport() {
+		const lists = await ldb.activities.list();
+		download_json_backup('breaks', {
+			type: 'focusdoro-breaks',
+			version: 1,
+			data: lists.map((el) => ({ name: el.name, values: [...el.values] }))
+		});
+	}
+
+	async function onImport() {
+		const parsed = await pick_json_backup_with_retry(is_valid_breaks_backup);
+		if (!parsed) return;
+
+		/** @type {{name: string, values: string[]}[]} */
+		const next = get_activity_lists_from_backup(parsed);
+		const unique = [...new Map(next.map((el) => [el.name, el])).values()];
+
+		const prev_names = await ldb.activities.getNames();
+		await Promise.all(prev_names.map((list_name) => ldb.activities.deleteOne(list_name)));
+		await Promise.all(
+			unique.map((el) =>
+				ldb.activities.upsertOne({ name: el.name, values: new Set(el.values) })
+			)
+		);
+
+		listNames = unique.map((el) => el.name);
+		name = listNames[0] || '';
+		values = name ? new Set(unique[0].values) : new Set();
+	}
 </script>
 
 <svelte:head>
@@ -143,6 +211,22 @@
 		class="form v2 alpha end"
 		on:submit|preventDefault={handleSubmitNewActivity}
 	>
+		<div class="backup-btns">
+			<Btn
+				type="button"
+				on:click={onExport}
+				accent="beta"
+				variant="outlined"
+				text="Export JSON"
+			/>
+			<Btn
+				type="button"
+				on:click={onImport}
+				accent="gamma"
+				variant="outlined"
+				text="Import JSON"
+			/>
+		</div>
 		<Field label={tb.new_activity}>
 			<input
 				bind:value={action}
@@ -194,6 +278,11 @@
 	}
 	.end {
 		margin-top: 2em;
+	}
+	.backup-btns {
+		display: flex;
+		gap: 0.75rem;
+		flex-wrap: wrap;
 	}
 
 	.notes {

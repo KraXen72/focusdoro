@@ -5,6 +5,7 @@ export const msg = {
 	tick: 'TICK',
 	resume: 'RESUME',
 	start: 'START',
+	set: 'SET',
 	stop: 'STOP',
 
 	remindTimerEnded: 'REMIND_TIMER_ENDED',

@@ -9,6 +9,22 @@ let min = 0;
 let sec = 0;
 // let startAt;
 
+/**
+ * @param {number | string | undefined} value
+ */
+function toTimePart(value) {
+	const parsed = Number(value);
+	if (!Number.isFinite(parsed)) return 0;
+	return Math.max(0, Math.floor(parsed));
+}
+
+function normalizeMinuteSecond() {
+	if (sec >= 60) {
+		min += Math.floor(sec / 60);
+		sec = sec % 60;
+	}
+}
+
 /** @type {ReturnType<setInterval>} */
 let reminderID;
 function startReminder() {
@@ -57,7 +73,7 @@ function stopTimer() {
 }
 
 self.onmessage = handle;
-/** @param {{ data: { mes: string; min: number; sec: number; }; }} e */
+/** @param {{ data: { mes: string; min?: number; sec?: number; }; }} e */
 function handle(e) {
 	// console.log({ w: e.data });
 	if (e.data.mes == msg.visible) {
@@ -84,11 +100,19 @@ function handle(e) {
 	}
 
 	if (e.data.mes == msg.start) {
-		min = e.data.min;
-		sec = e.data.sec;
+		min = toTimePart(e.data.min);
+		sec = toTimePart(e.data.sec);
+		normalizeMinuteSecond();
 
 		// startAt = performance.now();
 		startTimer();
+	}
+
+	if (e.data.mes == msg.set) {
+		min = toTimePart(e.data.min ?? min);
+		sec = toTimePart(e.data.sec ?? sec);
+		normalizeMinuteSecond();
+		postMessage({ mes: msg.tick, min, sec });
 	}
 }
 

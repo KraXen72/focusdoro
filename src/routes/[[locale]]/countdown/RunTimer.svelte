@@ -1,19 +1,17 @@
 <script>
-	import { onDestroy, onMount } from 'svelte';
-	import { msg } from '$lib/vars';
-	import { sendNotification } from '$lib/sendNotification';
-	import { opts } from '$store/settings';
-	import { createEventDispatcher } from 'svelte';
-	import { ch } from '$lib/utils';
-	import MyBtn from '$lib/MyBtn.svelte';
 	import MyBoxLay from '$lib/MyBoxLay.svelte';
+	import MyBtn from '$lib/MyBtn.svelte';
 	import { ensureAlarmPermission, playAlarm } from '$lib/audio';
-	import { getContext } from 'svelte';
+	import { sendNotification } from '$lib/sendNotification';
+	import { ch } from '$lib/utils';
+	import { msg } from '$lib/vars';
+	import { opts } from '$store/settings';
+	import { createEventDispatcher, getContext, onDestroy, onMount } from 'svelte';
 	/** @type {import('$lib/types').Localize } */
-	const l = getContext('ttt');
-	const bb = l.t.btn;
+	const localeText = getContext('ttt');
+	const buttonLabels = localeText.t.btn;
 
-	const dispatch = createEventDispatcher();
+	const dispatchEvent = createEventDispatcher();
 
 	/**
 	 * @typedef {Object} Props
@@ -34,113 +32,159 @@
 		with_controls = true,
 		show_init_nums = true,
 		autostart = true,
-		t = /** @type {{hh: number, mm: number, ss: number}} */ ({ hh: 0, mm: 0, ss: 0 }),
-		heading = l.t.timers.countdown.h,
+		t: initialTime = /** @type {{hh: number, mm: number, ss: number}} */ ({ hh: 0, mm: 0, ss: 0 }),
+		heading = localeText.t.timers.countdown.h,
 		title = $bindable('')
 	} = $props();
 
-	let h0 = $state('00');
-	let m0 = $state('00');
-	let s0 = $state('00');
-	let init_nums = $state('');
+	let initialHours = $state('00');
+	let initialMinutes = $state('00');
+	let initialSeconds = $state('00');
+	let initialTimeLabel = $state('');
 	let HH = $state('00');
 	let MM = $state('00');
 	let SS = $state('00');
-	let initialized = false;
+	let hasInitializedDisplay = false;
 
 	$effect(() => {
-		h0 = String(ch(t.hh));
-		m0 = String(ch(t.mm));
-		s0 = String(ch(t.ss));
-		init_nums = show_init_nums ? `${h0}:${m0}:${s0}` : '';
-		if (!initialized) {
-			HH = h0;
-			MM = m0;
-			SS = s0;
-			initialized = true;
+		initialHours = String(ch(initialTime.hh));
+		initialMinutes = String(ch(initialTime.mm));
+		initialSeconds = String(ch(initialTime.ss));
+		initialTimeLabel = show_init_nums
+			? `${initialHours}:${initialMinutes}:${initialSeconds}`
+			: '';
+		if (!hasInitializedDisplay) {
+			HH = initialHours;
+			MM = initialMinutes;
+			SS = initialSeconds;
+			hasInitializedDisplay = true;
 		}
 	});
 
 	/** @type {Worker | null} */
-	let w = null;
+	let timerWorker = null;
 	onMount(() => {
-		w = new Worker(new URL('$lib/worker_backward.js', import.meta.url), {
+		timerWorker = new Worker(new URL('$lib/worker_backward.js', import.meta.url), {
 			type: 'module'
 		});
 
-		w.onmessage = function (e) {
-			// console.log(e.data);
-			if (e.data.mes == msg.tick) {
-				SS = String(ch(e.data.sec));
+		timerWorker.onmessage = function (workerEvent) {
+			if (workerEvent.data.mes == msg.tick) {
+				SS = String(ch(workerEvent.data.sec));
 
-				const m = e.data.min;
+				const totalMinutes = workerEvent.data.min;
 
-				if (m >= 60) {
-					HH = String(ch(Math.floor(m / 60)));
-					MM = String(ch(m % 60));
+				if (totalMinutes >= 60) {
+					HH = String(ch(Math.floor(totalMinutes / 60)));
+					MM = String(ch(totalMinutes % 60));
 				} else {
 					HH = '00';
-					MM = String(ch(m));
+					MM = String(ch(totalMinutes));
 				}
 
-				title = `${HH}:${MM}:${SS} / ${h0}:${m0}:${s0}`;
+				title = `${HH}:${MM}:${SS} / ${initialHours}:${initialMinutes}:${initialSeconds}`;
 			}
 
-			if (e.data.mes == msg.finish) {
-				is_finished = true;
-				is_running = false;
+			if (workerEvent.data.mes == msg.finish) {
+				isFinished = true;
+				isRunning = false;
 				if ($opts.notifications) sendNotification('Timer');
 				if ($opts.alarm) playAlarm();
 			}
 		};
 
-		start_ticking();
+		startTicking();
 
 		if (!autostart) {
 			// pause
-			handle_play();
+			handlePlayPause();
 		}
 	});
-
-	function start_ticking() {
-		const data = {
-			mes: msg.start,
-			min: t.hh ? t.hh * 60 + t.mm : t.mm,
-			sec: t.ss
-		};
-
-		if (w) {
-			w.postMessage(data);
-			is_running = true;
-			is_finished = false;
-		}
-	}
 
 	onDestroy(() => {
 		// console.log('on destroy');
-		if (w) {
-			w.postMessage({ mes: msg.stop });
-			w.terminate();
-			w = null;
+		if (timerWorker) {
+			timerWorker.postMessage({ mes: msg.stop });
+			timerWorker.terminate();
+			timerWorker = null;
 		}
 	});
 
-	let is_finished = $state(false);
-	let is_running = $state(false);
+	let isFinished = $state(false);
+	let isRunning = $state(false);
+	const minuteOptions = [1, 5, 10];
 
-	function handle_play() {
+	function getTotalSeconds() {
+		return Number(HH) * 60 * 60 + Number(MM) * 60 + Number(SS);
+	}
+
+	/**
+	 * @param {number} totalSeconds
+	 */
+	function setDisplayTime(totalSeconds) {
+		const hh = Math.floor(totalSeconds / 3600);
+		const mm = Math.floor((totalSeconds % 3600) / 60);
+		const ss = totalSeconds % 60;
+
+		HH = String(ch(hh));
+		MM = String(ch(mm));
+		SS = String(ch(ss));
+		title = `${HH}:${MM}:${SS} / ${initialHours}:${initialMinutes}:${initialSeconds}`;
+	}
+
+	/**
+	 * @param {number} minuteDelta
+	 */
+	function handleAdjustTime(minuteDelta) {
+		const currentSeconds = getTotalSeconds();
+		if (minuteDelta < 0 && currentSeconds === 0) return;
+
+		const totalSeconds = Math.max(0, currentSeconds + minuteDelta * 60);
+		setDisplayTime(totalSeconds);
+		isFinished = false;
+
+		timerWorker?.postMessage({
+			mes: msg.set,
+			min: Math.floor(totalSeconds / 60),
+			sec: totalSeconds % 60
+		});
+	}
+
+	function handlePlayPause() {
 		// console.log('play');
-		if (is_finished) {
+		if (isFinished) {
 			ensureAlarmPermission();
-			return start_ticking();
+			return startTicking();
 		}
-		if (is_running) {
-			is_running = false;
-			w?.postMessage({ mes: msg.stop });
+		if (isRunning) {
+			isRunning = false;
+			timerWorker?.postMessage({ mes: msg.stop });
 		} else {
 			ensureAlarmPermission();
-			is_running = true;
-			w?.postMessage({ mes: msg.resume });
+			isRunning = true;
+			timerWorker?.postMessage({ mes: msg.resume });
+		}
+	}
+
+	/**
+	 * @param {number} [totalSeconds]
+	 */
+	function startTicking(
+		totalSeconds = initialTime.hh * 60 * 60 + initialTime.mm * 60 + initialTime.ss
+	) {
+		const min = Math.floor(totalSeconds / 60);
+		const sec = totalSeconds % 60;
+
+		const data = {
+			mes: msg.start,
+			min,
+			sec
+		};
+
+		if (timerWorker) {
+			timerWorker.postMessage(data);
+			isRunning = true;
+			isFinished = false;
 		}
 	}
 </script>
@@ -151,8 +195,8 @@
 
 <MyBoxLay
 	{heading}
-	{init_nums}
-	accent={is_running ? 'alpha' : 'beta'}
+	init_nums={initialTimeLabel}
+	accent={isRunning ? 'alpha' : 'beta'}
 	{HH}
 	{MM}
 	{SS}
@@ -161,15 +205,97 @@
 	{days}
 >
 	{#snippet btns()}
-	
+		<div class="btn-row">
 			<MyBtn
-				text={is_finished ? bb.restart : is_running ? bb.pause : bb.start}
-				onclick={handle_play}
+				text={isFinished ? buttonLabels.restart : isRunning ? buttonLabels.pause : buttonLabels.start}
+				onclick={handlePlayPause}
 			/>
-			<MyBtn accent="danger" text={bb.reset} onclick={() => dispatch('close')} />
-		
+			<MyBtn accent="danger" text={buttonLabels.reset} onclick={() => dispatchEvent('close')} />
+		</div>
+		<div class="controls-sep" aria-hidden="true"></div>
+		<div class="btn-row adjust-row">
+			{#each minuteOptions as minutes}
+				<div class="adjust-group">
+					<MyBtn
+						text={`-${minutes} ${localeText.t.time.mins}`}
+						onclick={() => handleAdjustTime(-minutes)}
+					/>
+					<MyBtn
+						text={`+${minutes} ${localeText.t.time.mins}`}
+						onclick={() => handleAdjustTime(minutes)}
+					/>
+				</div>
+			{/each}
+		</div>
 	{/snippet}
 </MyBoxLay>
 
-<!-- <style> -->
-<!-- </style> -->
+<style>
+	.btn-row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		width: 100%;
+	}
+
+	.controls-sep {
+		width: 100%;
+		height: 1px;
+		background: var(--fl0);
+		opacity: 0.4;
+		margin: 0.15rem 0;
+	}
+
+	.adjust-row {
+		flex-wrap: nowrap;
+	}
+
+	.adjust-row :global(.btn) {
+		--btn-h: 1.95em;
+		--_bg: var(--bga1);
+		--__mg0: var(--bga0);
+		--__mg1: var(--bg2);
+		--__fg: var(--fg2);
+		--__fg2: var(--fg);
+		--__fl1: var(--fl1);
+
+		font-size: 1.125rem;
+		border-radius: 0.65rem;
+	}
+
+	.adjust-row :global(.btn.outlined:not(:hover):not(:focus-visible)) {
+		background: var(--bga1);
+		backdrop-filter: blur(3px);
+	}
+
+	.adjust-group {
+		display: flex;
+		gap: 0;
+		flex: 1 1 0;
+		min-width: 0;
+	}
+
+	.adjust-group :global(.btn) {
+		flex: 1 1 0;
+		min-width: 0;
+	}
+
+	.adjust-group :global(.btn:first-child) {
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+		border-right-width: 0;
+	}
+
+	.adjust-group :global(.btn:last-child) {
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+	}
+
+	.adjust-group :global(.btn:first-child:is(:hover, :focus-visible)) {
+		border-right-width: 1px;
+	}
+
+	.adjust-group :global(.btn:first-child:is(:hover, :focus-visible) + .btn) {
+		border-left-width: 0;
+	}
+</style>

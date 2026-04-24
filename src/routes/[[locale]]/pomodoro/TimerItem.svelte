@@ -25,6 +25,9 @@
 	/** @type {Props} */
 	let { idx, st = $bindable() } = $props();
 
+	let currentMin = $state(st.min);
+	let currentSec = $state(st.sec);
+
 	let w = new Worker(new URL('$lib/worker_backward.js', import.meta.url), {
 		type: 'module'
 	});
@@ -32,12 +35,14 @@
 	w.onmessage = function (e) {
 		// console.log(e.data);
 		if (e.data.mes == msg.tick) {
+			currentMin = e.data.min;
+			currentSec = e.data.sec;
 			st.min = e.data.min;
 			st.sec = e.data.sec;
 
 			if (idx === 0 && !sh.pomo_is_active) {
 				sh.timers_is_active = true;
-				const title = `${MM}:${SS} / ${m0}:${s0}`;
+				const title = `${ch(currentMin)}:${ch(currentSec)} / ${m0}:${s0}`;
 				// console.log({ ...sh, idx, title });
 				$my_title = title;
 			}
@@ -64,8 +69,8 @@
 	const m0 = ch(st.min);
 	const s0 = ch(st.sec);
 
-	let MM = $derived(ch(st.min));
-	let SS = $derived(ch(st.sec));
+	let MM = $derived(ch(currentMin));
+	let SS = $derived(ch(currentSec));
 
 	const data = { mes: msg.start, min: st.min, sec: st.sec };
 	w.postMessage(data);

@@ -31,7 +31,11 @@
 	// const ls_recent_timers = 'p_recent_timers';
 
 	function on_submit() {
-		if (!vv.hh && !vv.mm && !vv.ss) {
+		const hh = Number(vv.hh) || 0;
+		const mm = Number(vv.mm) || 0;
+		const ss = Number(vv.ss) || 0;
+
+		if (!hh && !mm && !ss) {
 			// console.log('zero');
 			return;
 		}
@@ -40,9 +44,9 @@
 			localStorage.setItem(ls_timer_vals, JSON.stringify(vv));
 		}
 
-		let min = vv.mm;
-		if (vv.hh) min += vv.hh * 60;
-		let sec = vv.ss;
+		let min = mm;
+		if (hh) min += hh * 60;
+		let sec = ss;
 
 		// const data = { min, sec: ss };
 		timers.update((v) => {

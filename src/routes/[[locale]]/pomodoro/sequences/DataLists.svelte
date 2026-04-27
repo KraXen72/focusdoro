@@ -1,4 +1,4 @@
-<script lang="ts>
+<script lang="ts">
 	import { ldb } from '$lib/db';
 	/** @type {Set<string>} */
 	let res = $state(new Set());

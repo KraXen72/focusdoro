@@ -1,4 +1,4 @@
-<script lang="ts>
+<script lang="ts">
 	import { Btn, Icon } from '@kazkadien/svelte';
 </script>
 
@@ -18,10 +18,4 @@
 		/* border: var(--border); */
 		border-radius: var(--btn-br);
 	}
-
-	/* @media only screen and (min-width: 600px) { */
-	/* 	.close-btn { */
-	/* 		display: none; */
-	/* 	} */
-	/* } */
 </style>

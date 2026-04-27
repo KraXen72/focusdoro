@@ -1,4 +1,4 @@
-<script lang="ts>
+<script lang="ts">
 	import { Btn, Field, Icon } from '@kazkadien/svelte';
 	import { parseDuration } from '@timelang/parse';
 	import { getContext, onMount } from 'svelte';

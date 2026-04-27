@@ -1,4 +1,4 @@
-<script lang="ts>
+<script lang="ts">
 	import { opts } from '$store/settings';
 	import { currSequenceName } from '$store/store';
 	import { ldb, s6x30 } from '$lib/db';

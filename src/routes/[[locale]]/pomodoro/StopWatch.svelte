@@ -1,4 +1,4 @@
-<script lang="ts>
+<script lang="ts">
 	import { Btn } from '@kazkadien/svelte';
 	import { sh } from './MainView.svelte';
 	// import { timers } from './TimerNew.svelte';

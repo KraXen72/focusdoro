@@ -1,4 +1,4 @@
-<script lang="ts>
+<script lang="ts">
 	import { currSequenceName, sequences } from '$store/store';
 	import { Field } from '@kazkadien/svelte';
 	import { getContext } from 'svelte';

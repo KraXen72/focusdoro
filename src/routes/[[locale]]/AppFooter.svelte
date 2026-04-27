@@ -1,4 +1,4 @@
-<script lang="ts>
+<script lang="ts">
 	import { dev } from '$app/environment';
 	import MyProjects from './MyProjects.svelte';
 	// import Name from '$lib/Name.svelte';

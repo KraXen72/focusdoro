@@ -1,4 +1,4 @@
-<script lang="ts>
+<script lang="ts">
 	import { preventDefault } from 'svelte/legacy';
 
 	import MyLayout from '$lib/MyLayout.svelte';

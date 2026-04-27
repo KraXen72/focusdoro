@@ -1,4 +1,4 @@
-<script lang="ts>
+<script lang="ts">
 	import MyBoxLay from '$lib/MyBoxLay.svelte';
 	import MyBtn from '$lib/MyBtn.svelte';
 	import { ensureAlarmPermission, playAlarm } from '$lib/audio';

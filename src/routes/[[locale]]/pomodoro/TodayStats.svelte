@@ -51,7 +51,7 @@
 	}
 </script>
 
-<script lang="ts>
+<script lang="ts">
 	import MyIcon from '$lib/MyIcon.svelte';
 	import { getContext } from 'svelte';
 	/** @type {import('$lib/types').Localize } */

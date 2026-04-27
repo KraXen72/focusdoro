@@ -1,4 +1,4 @@
-<script lang="ts>
+<script lang="ts">
 	/**
 	 * @typedef {Object} Props
 	 * @property {import('svelte').Snippet} [children]

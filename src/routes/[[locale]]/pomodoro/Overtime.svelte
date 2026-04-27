@@ -1,4 +1,4 @@
-<script lang="ts>
+<script lang="ts">
 	import { getContext } from 'svelte';
 	/** @type {import('$lib/types').Localize } */
 	const l = getContext('ttt');

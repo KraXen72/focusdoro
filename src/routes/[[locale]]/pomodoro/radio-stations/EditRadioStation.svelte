@@ -1,4 +1,4 @@
-<script lang="ts>
+<script lang="ts">
 	import { preventDefault } from 'svelte/legacy';
 
 	import { Btn, Field } from '@kazkadien/svelte';

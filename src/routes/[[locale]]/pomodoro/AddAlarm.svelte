@@ -6,7 +6,7 @@
 	export const alarms = writable(arr);
 </script>
 
-<script lang="ts>
+<script lang="ts">
 	import { run, preventDefault } from 'svelte/legacy';
 
 	import CloseBtn from '$lib/CloseBtn.svelte';

@@ -1,4 +1,4 @@
-<script lang="ts>
+<script lang="ts">
 	import MyIcon from '$lib/MyIcon.svelte';
 	import { Btn, Dropdown, Field } from '@kazkadien/svelte';
 	import { getContext } from 'svelte';

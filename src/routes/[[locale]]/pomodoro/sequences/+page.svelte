@@ -1,4 +1,4 @@
-<script lang="ts>
+<script lang="ts">
 	import EditSequence from './EditSequence.svelte';
 	import MyIcon from '$lib/MyIcon.svelte';
 	import MyLayout from '$lib/MyLayout.svelte';

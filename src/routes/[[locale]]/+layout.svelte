@@ -1,4 +1,4 @@
-<script lang="ts>
+<script lang="ts">
 	import AppFooter from './AppFooter.svelte';
 	import AppHeader from './AppHeader.svelte';
 	import AppAdditionalIcons from './AppAdditionalIcons.svelte';

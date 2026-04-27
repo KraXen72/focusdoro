@@ -1,4 +1,4 @@
-<script lang="ts>
+<script lang="ts">
 	import { goto } from '$app/navigation';
 	import RunTimer from '../../RunTimer.svelte';
 	import { getContext, untrack } from 'svelte';

@@ -3,7 +3,7 @@
 	export const sh = { pomo_is_active: false, timers_is_active: false };
 </script>
 
-<script lang="ts>
+<script lang="ts">
 	import Clock from './Clock.svelte';
 	import TodayStats, {
 		updateBreakStats,

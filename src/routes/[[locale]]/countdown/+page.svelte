@@ -1,4 +1,4 @@
-<script lang="ts>
+<script lang="ts">
 	import SetupTimer from './SetupTimer.svelte';
 	import RunTimer from './RunTimer.svelte';
 	import { getContext } from 'svelte';

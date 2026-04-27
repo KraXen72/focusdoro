@@ -1,4 +1,4 @@
-<script lang="ts>
+<script lang="ts">
 	/**
 	 * @typedef {Object} Props
 	 * @property {'base' | 'alpha' | 'beta' | 'gamma' | 'danger' | ''} [accent]

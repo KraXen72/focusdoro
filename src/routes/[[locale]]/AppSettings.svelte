@@ -1,4 +1,4 @@
-<script lang="ts>
+<script lang="ts">
 	import { page } from '$app/state';
 	import CloseBtn from '$lib/CloseBtn.svelte';
 	import { opts } from '$store/settings';

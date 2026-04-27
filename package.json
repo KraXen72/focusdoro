@@ -25,6 +25,7 @@
 	"dependencies": {
 		"@kazkadien/svelte": "^0.32.0",
 		"@sveltejs/adapter-static": "^3.0.10",
+		"@timelang/parse": "^0.1.1",
 		"autoprefixer": "^10.5.0",
 		"howler": "^2.2.4",
 		"idb": "^8.0.3",

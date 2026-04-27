@@ -8,8 +8,8 @@
 	import { opts } from '$store/settings';
 	import { createEventDispatcher, getContext, onDestroy, onMount } from 'svelte';
 	/** @type {import('$lib/types').Localize } */
-	const localeText = getContext('ttt');
-	const buttonLabels = localeText.t.btn;
+	const l = getContext('ttt');
+	const buttonLabels = l.t.btn;
 
 	const dispatchEvent = createEventDispatcher();
 
@@ -33,7 +33,7 @@
 		show_init_nums = true,
 		autostart = true,
 		t: initialTime = /** @type {{hh: number, mm: number, ss: number}} */ ({ hh: 0, mm: 0, ss: 0 }),
-		heading = localeText.t.timers.countdown.h,
+		heading = l.t.timers.countdown.h,
 		title = $bindable('')
 	} = $props();
 
@@ -217,11 +217,11 @@
 			{#each minuteOptions as minutes}
 				<div class="adjust-group">
 					<MyBtn
-						text={`-${minutes} ${localeText.t.time.mins}`}
+						text={`-${minutes} ${l.t.time.mins}`}
 						onclick={() => handleAdjustTime(-minutes)}
 					/>
 					<MyBtn
-						text={`+${minutes} ${localeText.t.time.mins}`}
+						text={`+${minutes} ${l.t.time.mins}`}
 						onclick={() => handleAdjustTime(minutes)}
 					/>
 				</div>

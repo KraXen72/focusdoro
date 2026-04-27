@@ -49,6 +49,9 @@ const fr = {
 	time: {
 		date: 'Date',
 		time: 'Temps',
+		duration: 'Durée',
+		duration_invalid: 'Veuillez saisir une durée valide (ex. 10min)',
+		recent_timers: 'Minuteurs récents',
 		until: "Temps jusqu'à",
 		expired: 'Expiré',
 		days: 'Jours',

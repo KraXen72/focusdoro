@@ -49,6 +49,9 @@ const ua = {
 	time: {
 		date: 'Дата',
 		time: 'Час',
+		duration: 'Тривалість',
+		duration_invalid: 'Введіть коректну тривалість (наприклад, 10min)',
+		recent_timers: 'Нещодавні таймери',
 		until: 'Час до',
 		expired: 'Термін минув',
 		days: 'Днів',

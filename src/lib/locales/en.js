@@ -48,6 +48,9 @@ const en = {
 	time: {
 		date: 'Date',
 		time: 'Time',
+		duration: 'Duration',
+		duration_invalid: 'Please enter a valid duration (e.g. 10min)',
+		recent_timers: 'Recent timers',
 		until: 'Time until',
 		expired: 'Expired',
 		days: 'Days',

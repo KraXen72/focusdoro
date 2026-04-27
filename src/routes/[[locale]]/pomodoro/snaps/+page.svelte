@@ -1,4 +1,4 @@
-<script>
+<script lang="ts>
 	import { ldb, restore_data } from '$lib/db';
 	import { Alert, Btn } from '@kazkadien/svelte';
 	const VERSION = 1;

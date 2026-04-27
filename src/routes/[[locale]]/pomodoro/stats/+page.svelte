@@ -1,4 +1,4 @@
-<script>
+<script lang="ts>
 	import { ldb } from '$lib/db';
 	import { onMount } from 'svelte';
 	import Activities from './Activities.svelte';

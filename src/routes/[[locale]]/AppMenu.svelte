@@ -1,4 +1,4 @@
-<script>
+<script lang="ts>
 	import CloseBtn from '$lib/CloseBtn.svelte';
 	import { BtnIcon } from '@kazkadien/svelte';
 	import { getContext } from 'svelte';

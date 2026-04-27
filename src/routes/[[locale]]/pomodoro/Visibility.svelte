@@ -5,7 +5,7 @@
 	};
 </script>
 
-<script>
+<script lang="ts>
 	// https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API#example
 
 	import { onDestroy } from 'svelte';

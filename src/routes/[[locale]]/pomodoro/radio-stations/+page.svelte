@@ -1,4 +1,4 @@
-<script>
+<script lang="ts>
 	import EditRadioStation from './EditRadioStation.svelte';
 	import MyIcon from '$lib/MyIcon.svelte';
 	import MyLayout from '$lib/MyLayout.svelte';

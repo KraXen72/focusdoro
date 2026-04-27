@@ -1,4 +1,4 @@
-<script>
+<script lang="ts>
 	import { createBubbler, preventDefault } from 'svelte/legacy';
 
 	const bubble = createBubbler();

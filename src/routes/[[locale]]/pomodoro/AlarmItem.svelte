@@ -1,4 +1,4 @@
-<script>
+<script lang="ts>
 	import { onDestroy } from 'svelte';
 	import { msg } from '$lib/vars';
 	import { BtnIcon } from '@kazkadien/svelte';

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts>
 	import { timers } from './AddTimer.svelte';
 	import TimerItem from './TimerItem.svelte';
 	import { alarms } from './AddAlarm.svelte';

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts>
 	import Name from '$lib/Name.svelte';
 	import AppMenu from './AppMenu.svelte';
 	import AppSettings from './AppSettings.svelte';

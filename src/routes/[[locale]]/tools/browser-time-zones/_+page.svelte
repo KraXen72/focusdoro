@@ -1,4 +1,4 @@
-<script>
+<script lang="ts>
 	const d = new Date();
 	const time_zones = Intl.supportedValuesOf('timeZone').map((v) => {
 		// return [v, d.toLocaleString(undefined, { timeZone: v,  })];

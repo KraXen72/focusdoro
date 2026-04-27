@@ -1,4 +1,4 @@
-<script>
+<script lang="ts>
 	import { onDestroy, onMount, getContext } from 'svelte';
 	import MyBtn from '$lib/MyBtn.svelte';
 	import MyBoxLay from '$lib/MyBoxLay.svelte';

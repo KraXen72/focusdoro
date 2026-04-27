@@ -1,4 +1,4 @@
-<script>
+<script lang="ts>
 	/** @typedef {'base' | 'alpha' | 'beta' | 'gamma' | 'danger'} Accent*/
 	
 	

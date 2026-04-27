@@ -1,4 +1,4 @@
-<script>
+<script lang="ts>
 	import { ch } from '$lib/utils';
 	import { getContext } from 'svelte';
 	/** @type {import('$lib/types').Localize } */

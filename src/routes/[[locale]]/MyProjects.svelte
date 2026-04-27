@@ -1,4 +1,4 @@
-<script>
+<script lang="ts>
 	import { Dtl } from '@kazkadien/svelte';
 
 	const my_projects = [

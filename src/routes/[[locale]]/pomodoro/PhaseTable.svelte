@@ -1,4 +1,4 @@
-<script>
+<script lang="ts>
 	import MyIcon from '$lib/MyIcon.svelte';
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();

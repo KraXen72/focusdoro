@@ -6,7 +6,7 @@
 	export const timers = writable(arr);
 </script>
 
-<script>
+<script lang="ts>
 	import { preventDefault } from 'svelte/legacy';
 
 	import { browser } from '$app/environment';

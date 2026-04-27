@@ -1,4 +1,4 @@
-<script>
+<script lang="ts>
 	import { Dropdown } from '@kazkadien/svelte';
 	import { page } from '$app/state';
 	// page.subscribe((p) => console.log(p));

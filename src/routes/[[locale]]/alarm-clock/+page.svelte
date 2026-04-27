@@ -1,4 +1,4 @@
-<script>
+<script lang="ts>
 	import SetupLay from '$lib/SetupLay.svelte';
 	import SetupTimer from './SetupTimer.svelte';
 	import { getContext, onDestroy } from 'svelte';

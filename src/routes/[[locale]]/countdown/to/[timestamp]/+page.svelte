@@ -1,4 +1,4 @@
-<script>
+<script lang="ts>
 	import RunTimer from '../../RunTimer.svelte';
 	import { getContext } from 'svelte';
 	/** @type {import('$lib/types').Localize } */

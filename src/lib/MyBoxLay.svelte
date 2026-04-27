@@ -1,31 +1,23 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
-	/** @type {import('$lib/types').Localize } */
-	const l = getContext('ttt');
+	import type { Snippet } from 'svelte';
+	import type { Localize } from '$lib/types';
 	
+	const l: Localize = getContext('ttt');
 	
+	interface Props {
+		accent?: 'base' | 'alpha' | 'beta' | 'gamma' | 'danger' | '';
+		heading: string;
+		HH: string | number;
+		MM: string | number;
+		SS: string | number;
+		init_nums?: string;
+		with_controls?: boolean;
+		days?: number;
+		with_label?: boolean;
+		btns?: Snippet;
+	}
 
-	
-	
-	
-
-	
-
-	/**
-	 * @typedef {Object} Props
-	 * @property {'base' | 'alpha' | 'beta' | 'gamma' | 'danger' | ''} [accent]
-	 * @property {string } heading
-	 * @property {string | number} HH
-	 * @property {string | number} MM
-	 * @property {string | number} SS
-	 * @property {string } [init_nums]
-	 * @property {boolean} [with_controls]
-	 * @property {number} [days]
-	 * @property {boolean} [with_label]
-	 * @property {import('svelte').Snippet} [btns]
-	 */
-
-	/** @type {Props} */
 	let {
 		accent = '',
 		heading,
@@ -37,7 +29,7 @@
 		days = 0,
 		with_label = false,
 		btns
-	} = $props();
+	}: Props = $props();
 </script>
 
 <div class={accent}>

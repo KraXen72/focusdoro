@@ -1,22 +1,19 @@
 <script lang="ts">
-	/** @typedef {'base' | 'alpha' | 'beta' | 'gamma' | 'danger'} Accent*/
-	
-	
-	/**
-	 * @typedef {Object} Props
-	 * @property {string} [accent]
-	 * @property {import("$typings/types").IMyIcon} name
-	 * @property {string} [fill]
-	 * @property {string} [width]
-	 */
+	import type { IMyIcon } from "$typings/types";
 
-	/** @type {Props} */
+	interface Props {
+		accent?: 'base' | 'alpha' | 'beta' | 'gamma' | 'danger' | '';
+		name: IMyIcon;
+		fill?: string;
+		width?: string;
+	}
+
 	let {
 		accent = '',
 		name,
 		fill = 'currentColor',
 		width = '1.5em'
-	} = $props();
+	}: Props = $props();
 </script>
 
 <svg

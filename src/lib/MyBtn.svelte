@@ -1,21 +1,21 @@
 <script lang="ts">
-	/**
-	 * @typedef {Object} Props
-	 * @property {'base' | 'alpha' | 'beta' | 'gamma' | 'danger' | ''} [accent]
-	 * @property {string } [text]
-	 * @property {string } [title]
-	 * @property {(event: MouseEvent) => void} [onclick]
-	 * @property {import('svelte').Snippet} [children]
-	 */
+	import type { Snippet } from 'svelte';
 
-	/** @type {Props} */
+	interface Props {
+		accent?: 'base' | 'alpha' | 'beta' | 'gamma' | 'danger' | '';
+		text?: string;
+		title?: string;
+		onclick?: (event: MouseEvent) => void;
+		children?: Snippet;
+	}
+
 	let {
 		accent = '',
 		text = '',
 		title = '',
 		onclick,
 		children
-	} = $props();
+	}: Props = $props();
 </script>
 
 <button class="btn colored outlined {accent}" {onclick} {title}>

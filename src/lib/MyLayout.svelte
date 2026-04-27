@@ -1,21 +1,21 @@
 <script lang="ts">
-	/**
-	 * @typedef {Object} Props
-	 * @property {string} [title]
-	 * @property {import('svelte').Snippet} [top]
-	 * @property {import('svelte').Snippet} [list]
-	 * @property {import('svelte').Snippet} [children]
-	 * @property {import('svelte').Snippet} [btns]
-	 */
+	import type { Snippet } from "svelte"
 
-	/** @type {Props} */
+	interface Props {
+		title?: string;
+		top?: Snippet;
+		list?: Snippet;
+		children?: Snippet;
+		btns?: Snippet;
+	}
+
 	let {
 		title = '',
 		top,
 		list,
 		children,
 		btns
-	} = $props();
+	}: Props = $props();
 </script>
 
 <div class="lay">

@@ -1,6 +1,6 @@
 packages: []
-
-onlyBuiltDependencies:
-  - '@sveltejs/kit'
-  - esbuild
-  - svelte-preprocess
+engineStrict: true
+allowBuilds:
+  '@sveltejs/kit': true
+  esbuild: true
+  svelte-preprocess: true
